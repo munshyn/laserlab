@@ -1,4 +1,80 @@
-.App {
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+
+.main-content {
+  font-family: "Poppins", sans-serif;
+}
+
+.header {
+  text-align: start;
+  color: white;
+  padding: 3vh 20vw;
+  background-color: rgb(68, 68, 68);
+  height: 15vh;
+  box-shadow: 0px 8px 10px grey;
+}
+
+.header h2 {
+  font-size: 45px;
+  font-weight: 100;
+  margin-bottom: 5px;
+}
+
+.header h1 {
+  margin-top: 5px;
+  font-size: 50px;
+  font-weight: 100;
+}
+
+.utm-logo {
+  display: flex;
+  justify-content: center;
+  margin: 10px;
+}
+
+.content {
+  display: flex;
+  justify-content: space-around;
+  box-shadow: 0px 8px 10px grey;
+  margin: 50px 15vw;
+}
+
+.greetings {
+  width: 20vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 5vh 0vw;
+}
+
+.greetings h3{
+  font-weight: 900;
+  font-size: 50px;
+  color: grey;
+  text-shadow: 2px 2px 4px #4a4a4a;
+  padding-bottom: 2vh;
+}
+
+.login-form {
+  width: 20vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 5vh 2vw;
+}
+
+.register-form {
+  width: 40vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 5vh 7vw;
+}
+.form-box {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* .App {
   text-align: center;
 }
 
@@ -35,4 +111,4 @@
   to {
     transform: rotate(360deg);
   }
-}
+} */
