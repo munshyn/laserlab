@@ -2,17 +2,29 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Alert from "react-bootstrap/Alert";
 import React, { useState, useEffect } from "react";
-import "../App.css";
 import utmlogo from "../assets/utm-logo.svg";
-import { Navigate, Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
 import { login } from "../actions/auth";
+import Footer from "../component/Footer";
 
-const Login = ({ login, isAuthenticated }) => {
+const Login = ({ login, isAuthenticated, role }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errMsg, setErrMsg] = useState("");
   const [login_fail, setFail] = useState("");
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      if (role == "ADMIN") {
+        navigate("/dashboard");
+      } else {
+        navigate("/services");
+      }
+    }
+  }, []);
 
   useEffect(() => {
     setErrMsg("");
@@ -26,21 +38,28 @@ const Login = ({ login, isAuthenticated }) => {
     if (data.detail) {
       setErrMsg(data.detail);
       setFail(true);
-    } else setFail(false);
+    } else {
+      setFail(false);
+      console.log(role)
+      if (role == "RO") {
+        navigate("/dashboard");
+      } else {
+        navigate("/services");
+      }
+    }
   };
-
-  if (isAuthenticated) {
-    return <Navigate to="/home" />;
-  }
 
   return (
     <div className="main-content">
       <div className="utm-logo">
         <img src={utmlogo} alt="logo" />
       </div>
-      <div className="header">
-        <h2>LASER CENTRE</h2>
-        <h1>Equipments & Facilities</h1>
+      <div className="header-center d-flex justify-content-evenly">
+        <div>
+          <h2>LASER CENTRE</h2>
+          <h1>Equipments & Facilities</h1>
+        </div>
+        <div></div>
       </div>
       <div className="content">
         <div className="greetings">
@@ -105,18 +124,32 @@ const Login = ({ login, isAuthenticated }) => {
                 required
               />
             </Form.Group>
-            <Button variant="success" type="submit">
-              Submit
-            </Button>
+            <div className="d-flex justify-content-between">
+              <Link
+                to="/reset-password"
+                style={{
+                  color: "darkgreen",
+                  fontWeight: "600",
+                  textDecoration: "none",
+                }}
+              >
+                Forgot password?
+              </Link>
+              <Button variant="success" type="submit">
+                Submit
+              </Button>
+            </div>
           </Form>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };
 
 const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
+  role: state.auth.role,
 });
 
 export default connect(mapStateToProps, { login })(Login);

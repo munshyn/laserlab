@@ -112,7 +112,6 @@ export const login = (email, password) => async (dispatch) => {
     dispatch(load_user());
 
     return res.data;
-
   } catch (err) {
     dispatch({
       type: LOGIN_FAIL,
@@ -144,10 +143,10 @@ export const signup =
       });
       return res.data;
     } catch (err) {
-        dispatch({
-            type: SIGNUP_FAIL,
-        });
-        return err.response.data;
+      dispatch({
+        type: SIGNUP_FAIL,
+      });
+      return err.response.data;
     }
   };
 

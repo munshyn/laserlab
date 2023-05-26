@@ -2,13 +2,14 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Alert from "react-bootstrap/Alert";
 import React, { useState, useEffect } from "react";
-import "../App.css";
 import utmlogo from "../assets/utm-logo.svg";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { signup } from "../actions/auth";
+import Footer from "../component/Footer";
+import { Col, Row } from "react-bootstrap";
 
-const Register = ({ signup, isAuthenticated }) => {
+const Register = ({ signup }) => {
   const [accountCreated, setAccountCreated] = useState(false);
   const [passwordNotMatch, setPasswordNotMatch] = useState("");
   const [passRef, setPassRef] = useState(false);
@@ -86,11 +87,11 @@ const Register = ({ signup, isAuthenticated }) => {
       <div className="utm-logo">
         <img src={utmlogo} alt="logo" />
       </div>
-      <div className="header">
+      <div className="header-center">
         <h1>Registration</h1>
       </div>
       <div className="content">
-        <div className="register-form">
+        <div className="center-form">
           {popup_box()}
           <p>
             Already a user?
@@ -108,9 +109,8 @@ const Register = ({ signup, isAuthenticated }) => {
             </i>{" "}
           </p>
           <Form onSubmit={(e) => onSubmit(e)}>
-            <div className="form-box">
-              <div>
-                <Form.Group className="mb-3" controlId="formBasicName">
+              <Row>
+                <Form.Group as={Col} className="mb-3" controlId="formBasicName">
                   <Form.Label>Name</Form.Label>
                   <Form.Control
                     type="text"
@@ -122,21 +122,7 @@ const Register = ({ signup, isAuthenticated }) => {
                     Give me your name.
                   </Form.Text>
                 </Form.Group>
-                <Form.Group className="mb-3" controlId="formBasicEmail">
-                  <Form.Label>Email address</Form.Label>
-                  <Form.Control
-                    type="email"
-                    placeholder="Enter email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                  <Form.Text className="text-muted">
-                    We'll never share your email with anyone else.
-                  </Form.Text>
-                </Form.Group>
-              </div>
-              <div>
-                <Form.Group className="mb-3" controlId="formBasicPassword">
+                <Form.Group as={Col} className="mb-3" controlId="formBasicPassword">
                   <Form.Label>Password</Form.Label>
                   <Form.Control
                     type="password"
@@ -149,7 +135,21 @@ const Register = ({ signup, isAuthenticated }) => {
                     Password must be more than 8 letters.
                   </Form.Text>
                 </Form.Group>
-                <Form.Group className="mb-3" controlId="formConfirmPassword">
+              </Row>
+              <Row>
+                <Form.Group as={Col} className="mb-3" controlId="formBasicEmail">
+                  <Form.Label>Email address</Form.Label>
+                  <Form.Control
+                    type="email"
+                    placeholder="Enter email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                  <Form.Text className="text-muted">
+                    We'll never share your email with anyone else.
+                  </Form.Text>
+                </Form.Group>
+                <Form.Group as={Col} className="mb-3" controlId="formConfirmPassword">
                   <Form.Label>Confirm Password</Form.Label>
                   <Form.Control
                     type="password"
@@ -159,20 +159,16 @@ const Register = ({ signup, isAuthenticated }) => {
                     minLength={8}
                   />
                 </Form.Group>
-              </div>
-            </div>
+              </Row>
             <Button variant="success" type="submit">
               Submit
             </Button>
           </Form>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };
 
-const mapStateToProps = (state) => ({
-  isAuthenticated: state.auth.isAuthenticated,
-});
-
-export default connect(mapStateToProps, { signup })(Register);
+export default connect(null, { signup })(Register);
