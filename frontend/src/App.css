@@ -6,6 +6,10 @@ html, body{
   height: 100%;
 }
 
+a{
+  text-decoration: none;
+}
+
 .App {
   font-family: "Poppins", sans-serif;
   display: flex;
@@ -242,18 +246,69 @@ html, body{
 }
 
 .listing-container {
-  border: 1px solid #ccc;
+  /* border: 1px solid #ccc; */
+  width: 90%;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 16px;
+  margin: auto;
+  height: 60vh;
+}
+
+.listing-content .listing-item td {
+  /* width: 80%; */
+  /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
+  padding: 20px;
+}
+
+.custom-list {
+  border: none;
+  text-align: center;
+  font-size: 18px;
+}
+
+.service-form {
+  display: flex;
+  /* justify-content: space-around; */
+  /* box-shadow: 0px 8px 10px grey; */
+  width: 100%;
+  margin: 0 auto auto auto;
+}
+.left-form {
+  padding: 15px;
+  box-shadow: 0px 8px 10px grey;
+  width: 50%;
+}
+.right-form {
+  padding: 15px;
+  box-shadow: 0px 8px 10px grey;
+  width: 50%;
+}
+
+
+/* .listing-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.listing-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  flex: 1 1 0;
 }
 
 .listing-content {
+  margin-bottom: 1rem;
+}*/
+
+/* .listing-buttons {
   display: flex;
-  justify-content: space-evenly;
-  border: 1px solid #ccc;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 16px;
-}
+  justify-content: center;
+  gap: 0.5rem;
+}  */
 
 /* .sidebar {
   background-color: #373737;

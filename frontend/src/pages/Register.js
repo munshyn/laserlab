@@ -13,7 +13,6 @@ const Register = ({ signup }) => {
   const [accountCreated, setAccountCreated] = useState(false);
   const [passwordNotMatch, setPasswordNotMatch] = useState("");
   const [passRef, setPassRef] = useState(false);
-  const [passRefMsg, setPassRefMsg] = useState(false);
   const [emailRef, setEmailRef] = useState(false);
 
   const [name, setName] = useState("");
@@ -23,7 +22,6 @@ const Register = ({ signup }) => {
 
   useEffect(() => {
     setEmailRef(false);
-    setPassRefMsg("");
     setPassRef(false);
     setPasswordNotMatch(false);
   }, [name, email, password, re_password]);
@@ -35,19 +33,22 @@ const Register = ({ signup }) => {
 
     if (password === re_password) {
       const data = await signup(email, name, role, password, re_password);
+      console.log(data[0]);
 
       if (data.password) {
         console.log(data.password[0]);
-        setPassRefMsg(data.password[0]);
         setPassRef(true);
       } else if (data.email === "users with this email already exists.") {
-        console.log(data.email);
         setEmailRef(true);
       } else {
         setAccountCreated(true);
         setEmailRef("");
         setPassRef("");
         setPasswordNotMatch(false);
+        setName("");
+        setEmail("");
+        setPassword("");
+        setRePassword("");
       }
     } else {
       setPasswordNotMatch(true);
@@ -70,7 +71,7 @@ const Register = ({ signup }) => {
     } else if (passRef) {
       return (
         <Alert variant="danger">
-          <p>{passRefMsg}</p>
+          <p>Password is too weak</p>
         </Alert>
       );
     } else if (passwordNotMatch) {

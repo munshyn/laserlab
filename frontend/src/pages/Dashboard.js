@@ -7,14 +7,14 @@ import { logout } from "../actions/auth";
 import Box from "../component/Box";
 import { FiInfo } from "react-icons/fi";
 
-const Dashboard = ({ isAuthenticated, role }) => {
-  const navigate = useNavigate();
+const Dashboard = ({ user }) => {
+  // const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      navigate("/");
-    }
-  }, []);
+  // useEffect(() => {
+    
+  // }, []);
+
+  
 
   return (
     <main className="main-content">
@@ -37,8 +37,7 @@ const Dashboard = ({ isAuthenticated, role }) => {
 };
 
 const mapStateToProps = (state) => ({
-  isAuthenticated: state.auth.isAuthenticated,
-  role: state.auth.role,
+  user: state.auth.user,
 });
 
 export default connect(mapStateToProps, { logout })(Dashboard);

@@ -10,6 +10,7 @@ class Equipment(models.Model):
     availability = models.BooleanField(blank=True, null=True)
     status = models.CharField(max_length=50)
     registered = models.BooleanField(blank=True, null=True)
+    hasService = models.BooleanField(blank=True, null=True)
     price = models.DecimalField(max_digits=7, decimal_places=2)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)

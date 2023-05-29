@@ -11,19 +11,19 @@ import Col from "react-bootstrap/esm/Col";
 
 const EditEquipment = ({ updateEquipment }) => {
   const prevLocation = useLocation();
-  const equipment = prevLocation.state.equipment;
+  const equipment = prevLocation.state?.equipment;
 
-  console.log(equipment.regNum)
-  
+  console.log(equipment.regNum);
+
   const [regNum, setRegNum] = useState(equipment.regNum);
   const [name, setName] = useState(equipment.name);
   const [qty, setQty] = useState(equipment.quantity);
   const [location, setLocation] = useState(equipment.location);
   const [registered, setRegistered] = useState(equipment.registered);
-  // const [availability, setAvailability] = useState("");
+  const [availability, setAvailability] = useState(equipment.availability);
   const [price, setPrice] = useState(equipment.price);
   const [status, setStatus] = useState(equipment.status);
-  
+
   const [editSuccess, setEditSuccess] = useState("");
 
   const onSubmit = async (e) => {
@@ -37,7 +37,7 @@ const EditEquipment = ({ updateEquipment }) => {
       registered: registered,
       price: price,
       status: status,
-      availability: "",
+      availability: availability,
     };
 
     const data = await updateEquipment(updatedEquipment, equipment.equipmentId);
@@ -83,9 +83,6 @@ const EditEquipment = ({ updateEquipment }) => {
                 value={regNum}
                 onChange={(e) => setRegNum(e.target.value)}
               />
-              <Form.Text className="text-muted">
-                You can't change this registration number once submitted
-              </Form.Text>
             </Form.Group>
             <Form.Group as={Col} className="mb-3" controlId="formBasicName">
               <Form.Label>Name</Form.Label>
@@ -95,7 +92,6 @@ const EditEquipment = ({ updateEquipment }) => {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
               />
-              <Form.Text className="text-muted">Equipment name</Form.Text>
             </Form.Group>
           </Row>
           <Row>
@@ -116,12 +112,9 @@ const EditEquipment = ({ updateEquipment }) => {
                 value={qty}
                 onChange={(e) => setQty(e.target.value)}
               />
-              <Form.Text className="text-muted">
-                This can be leave blank
-              </Form.Text>
             </Form.Group>
             <Form.Group as={Col} className="mb-3" controlId="formBasicPrice">
-              <Form.Label>Equipment Price</Form.Label>
+              <Form.Label>Equipment Price (RM)</Form.Label>
               <Form.Control
                 type="number"
                 placeholder="Price"
@@ -139,7 +132,6 @@ const EditEquipment = ({ updateEquipment }) => {
                 value={status}
                 onChange={(e) => setStatus(e.target.value)}
               />
-              <Form.Text className="text-muted">Good or damaged etc</Form.Text>
             </Form.Group>
             <Form.Group
               as={Col}
@@ -148,10 +140,36 @@ const EditEquipment = ({ updateEquipment }) => {
             >
               <Form.Label>Is the equipment registered in KEWPA?</Form.Label>
               <Form.Check
-                type="checkbox"
-                value={registered}
-                onChange={(e) => setRegistered(e.target.value)}
+                type="radio"
+                name="registered"
+                label="Yes"
+                value="true"
+                checked={registered}
+                onChange={(e) => setRegistered(e.target.value === "true")}
               />
+              <Form.Check
+                type="radio"
+                name="registered"
+                label="No"
+                value="false"
+                checked={!registered}
+                onChange={(e) => setRegistered(e.target.value === "true")}
+              />
+            </Form.Group>
+            <Form.Group
+              as={Col}
+              className="mb-3"
+              controlId="formBasicAvailability"
+            >
+              <Form.Label>Availability</Form.Label>
+              <Form.Control
+                as="select"
+                value={availability.toString()}
+                onChange={(e) => setAvailability(e.target.value === "true")}
+              >
+                <option value="true">Available</option>
+                <option value="false">Not available</option>
+              </Form.Control>
             </Form.Group>
           </Row>
           <Button variant="success" type="submit">

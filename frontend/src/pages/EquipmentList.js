@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Button } from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
 import Listing from "../component/Listing";
 import utmlogo from "../assets/utm-logo.svg";
 import { connect } from "react-redux";
@@ -43,26 +43,28 @@ const EquipmentList = ({ equipments, getAllEquipment, deleteEquipment, isAuthent
       <div className="header-img">
         <h1>List of Equipments</h1>
       </div>
-      <div className="container-md">
+      <div className="listing-container">
         <div className="listing-header">
           <Link to="/add-equipment">
-            <Button variant="primary">Add New</Button>
+            <Button variant="primary">Add New Equipment</Button>
           </Link>
-          <input type="text" placeholder="Search" className="listing-search" />
+          {/* <input type="text" placeholder="Search" className="listing-search" /> */}
         </div>
         <Listing items={equipments} onDelete={onDelete} />
-        {showDeleteConfirmation && (
-        <div className="delete-confirmation-overlay">
-          <div className="delete-confirmation-box">
-            <h2>Confirm Delete</h2>
-            <p>Are you sure you want to delete this item?</p>
-            <div className="delete-confirmation-buttons">
-              <button onClick={confirmDelete}>Delete</button>
-              <button onClick={cancelDelete}>Cancel</button>
-            </div>
-          </div>
-        </div>
-      )}
+      <Modal show={showDeleteConfirmation} onHide={cancelDelete}>
+        <Modal.Header>
+          <Modal.Title>Confirm Delete</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to delete this item?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={cancelDelete}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={confirmDelete}>
+            Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
       </div>
     </main>
   );

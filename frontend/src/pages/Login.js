@@ -8,7 +8,7 @@ import { connect } from "react-redux";
 import { login } from "../actions/auth";
 import Footer from "../component/Footer";
 
-const Login = ({ login, isAuthenticated, role }) => {
+const Login = ({ login, isAuthenticated, user }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errMsg, setErrMsg] = useState("");
@@ -16,15 +16,16 @@ const Login = ({ login, isAuthenticated, role }) => {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      if (role == "ADMIN") {
-        navigate("/dashboard");
-      } else {
-        navigate("/services");
-      }
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (isAuthenticated) {
+  //     console.log(isAuthenticated)
+  //     if (user?.role == "RO") {
+  //       navigate("/dashboard");
+  //     } else {
+  //       navigate("/services");
+  //     }
+  //   }
+  // }, []);
 
   useEffect(() => {
     setErrMsg("");
@@ -40,8 +41,7 @@ const Login = ({ login, isAuthenticated, role }) => {
       setFail(true);
     } else {
       setFail(false);
-      console.log(role)
-      if (role == "RO") {
+      if (data?.role == "RO") {
         navigate("/dashboard");
       } else {
         navigate("/services");
@@ -149,7 +149,7 @@ const Login = ({ login, isAuthenticated, role }) => {
 
 const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
-  role: state.auth.role,
+  user: state.auth.user,
 });
 
 export default connect(mapStateToProps, { login })(Login);

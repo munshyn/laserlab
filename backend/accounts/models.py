@@ -16,14 +16,12 @@ class UsersManager(BaseUserManager):
 
         return user
     
-    def create_superuser(self, email, name, password=None, **extra_fields):
+    def create_superuser(self, email, name, role, password=None, **extra_fields):
         if not email:
             raise ValueError('An email is required')
         if not password:
             raise ValueError('A password is required')
-        
-        role = "RO"
-        
+
         email = self.normalize_email(email)
         user = self.create_user(email, name, role, password, **extra_fields)
 
@@ -37,13 +35,14 @@ class UsersManager(BaseUserManager):
 class Users(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=100, unique=True)
     name = models.CharField(max_length=100)
+    phone_number = models.CharField(max_length=20, blank=True, null=True, unique=True)
     role = models.CharField(max_length=10)
     is_active = models.BooleanField(default=True)
 
     objects = UsersManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['name']
+    REQUIRED_FIELDS = ['name', 'role']
 
     def get_full_name(self):
         return self.name

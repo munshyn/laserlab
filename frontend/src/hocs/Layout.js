@@ -1,13 +1,18 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { checkAuthenticated, load_user } from "../actions/auth";
+import { checkTokenExpiration } from "../actions/auth";
 import SideMenu from "../component/SideMenu";
 
-const Layout = ({ load_user, children }) => {
-  // useEffect(() => {
-  //   // checkAuthenticated();
-  //   load_user();
-  // }, []);
+const Layout = ({ checkTokenExpiration, children }) => {
+  useEffect(() => {
+    const timer = setInterval(() => {
+      checkTokenExpiration();
+    }, 1000);
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, [checkTokenExpiration]);
 
   return (
     <div className="App">
@@ -17,4 +22,4 @@ const Layout = ({ load_user, children }) => {
   );
 };
 
-export default connect(null, { checkAuthenticated, load_user })(Layout);
+export default connect(null, { checkTokenExpiration })(Layout);

@@ -5,13 +5,8 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
 import { logout } from "../actions/auth";
 
-const Home = ({ isAuthenticated, user }) => {
-  const navigate = useNavigate();
-
-  if (!isAuthenticated) {
-    navigate("/");
-  }
-
+const Home = ({ user }) => {
+  
   return (
     <div className="main-content">
       <div className="utm-logo-start">
@@ -26,7 +21,6 @@ const Home = ({ isAuthenticated, user }) => {
 };
 
 const mapStateToProps = (state) => ({
-  isAuthenticated: state.auth.isAuthenticated,
   user: state.auth.user,
 });
 

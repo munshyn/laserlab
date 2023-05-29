@@ -19,10 +19,9 @@ import {
 const initialState = {
   access: localStorage.getItem("access"),
   refresh: localStorage.getItem("refresh"),
+  expiresAt: localStorage.getItem("expiresAt"),
   isAuthenticated: localStorage.getItem("access") ? true : false,
-  user: null,
-  role: localStorage.getItem("role"),
-  name: localStorage.getItem("name"),
+  user: JSON.parse(localStorage.getItem("user")),
 };
 
 export default function (state = initialState, action) {
@@ -35,13 +34,15 @@ export default function (state = initialState, action) {
         isAuthenticated: true,
       };
     case LOGIN_SUCCESS:
-      localStorage.setItem("access", payload.access);
-      localStorage.setItem("refresh", payload.refresh);
+      localStorage.setItem("access", payload.accessToken);
+      localStorage.setItem("refresh", payload.refreshToken);
+      localStorage.setItem("expiresAt", payload.expiresAt);
       return {
         ...state,
         isAuthenticated: true,
-        access: payload.access,
-        refresh: payload.refresh,
+        expiresAt: payload.expiresAt,
+        access: payload.accessToken,
+        refresh: payload.refreshToken,
       };
     case SIGNUP_SUCCESS:
       return {
@@ -49,15 +50,15 @@ export default function (state = initialState, action) {
         isAuthenticated: false,
       };
     case USER_LOADED_SUCCESS:
-      localStorage.setItem("role", payload.role);
-      localStorage.setItem("name", payload.name);
+      localStorage.setItem("user", JSON.stringify(payload));
       return {
         ...state,
         user: payload,
-        role: payload.role,
-        name: payload.name,
       };
     case AUTHENTICATED_FAIL:
+      localStorage.removeItem("access");
+      localStorage.removeItem("refresh");
+      localStorage.removeItem("user");
       return {
         ...state,
         isAuthenticated: false,
@@ -72,16 +73,14 @@ export default function (state = initialState, action) {
     case LOGOUT:
       localStorage.removeItem("access");
       localStorage.removeItem("refresh");
-      localStorage.removeItem("role");
-      localStorage.removeItem("name");
+      localStorage.removeItem("user");
       return {
         ...state,
         access: null,
         refresh: null,
+        expiresAt: null,
         isAuthenticated: false,
         user: null,
-        role: null,
-        name: null,
       };
     case PASSWORD_RESET_SUCCESS:
     case PASSWORD_RESET_FAIL:

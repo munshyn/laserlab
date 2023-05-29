@@ -1,4 +1,5 @@
 import axios from "axios";
+
 import {
   LOGIN_SUCCESS,
   LOGIN_FAIL,
@@ -49,6 +50,15 @@ export const load_user = () => async (dispatch) => {
   }
 };
 
+export const checkTokenExpiration = () => (dispatch) => {
+  const expiresAt = localStorage.getItem("expiresAt");
+  const currentTime = Math.floor(Date.now() / 1000);
+
+  if (expiresAt && currentTime > expiresAt) {
+    dispatch(logout());
+  }
+};
+
 export const checkAuthenticated = () => async (dispatch) => {
   if (localStorage.getItem("access")) {
     const config = {
@@ -89,7 +99,7 @@ export const checkAuthenticated = () => async (dispatch) => {
 };
 
 export const login = (email, password) => async (dispatch) => {
-  const config = {
+  const configg = {
     headers: {
       "Content-Type": "application/json",
     },
@@ -98,18 +108,45 @@ export const login = (email, password) => async (dispatch) => {
   const body = JSON.stringify({ email, password });
 
   try {
-    const res = await axios.post(
+    const ress = await axios.post(
       `${process.env.REACT_APP_API_URL}/auth/jwt/create/`,
       body,
+      configg
+    );
+
+    const wt_decode = (token) => {
+      var base64Url = token.split(".")[1];
+      var base64 = base64Url.replace("-", "+").replace("_", "/");
+      return JSON.parse(window.atob(base64));
+    };
+
+    const accessToken = ress.data.access;
+    const refreshToken = ress.data.refresh;
+    const decodedToken = wt_decode(ress.data.access);
+    const expiresAt = decodedToken.exp;
+
+    dispatch({
+      type: LOGIN_SUCCESS,
+      payload: { accessToken, refreshToken, expiresAt },
+    });
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `JWT ${accessToken}`,
+        Accept: "application/json",
+      },
+    };
+
+    const res = await axios.get(
+      `${process.env.REACT_APP_API_URL}/auth/users/me/`,
       config
     );
 
     dispatch({
-      type: LOGIN_SUCCESS,
+      type: USER_LOADED_SUCCESS,
       payload: res.data,
     });
-
-    dispatch(load_user());
 
     return res.data;
   } catch (err) {

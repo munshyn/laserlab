@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
 import { logout } from "../actions/auth";
 import { Button, Nav } from "react-bootstrap";
 import { FiHome, FiInfo, FiSettings } from "react-icons/fi";
 
-const SideMenu = ({ logout, isAuthenticated, role }) => {
+const SideMenu = ({ logout, isAuthenticated, user }) => {
   const navigate = useNavigate();
 
   const logout_user = async () => {
@@ -13,7 +13,13 @@ const SideMenu = ({ logout, isAuthenticated, role }) => {
     navigate("/");
   };
 
+  // useEffect(() => {
+  //   if(user?.role == "RO")
+  //     setRole("")
+  // },[user])
+
   const [expanded, setExpanded] = useState(true);
+  const [role, setRole] = useState("");
 
   const toggleSidebar = () => {
     setExpanded(!expanded);
@@ -24,7 +30,7 @@ const SideMenu = ({ logout, isAuthenticated, role }) => {
       {isAuthenticated && (
         <div className={`sidebar ${expanded ? "expanded" : ""}`}>
           <div className="sidebar-header">
-            {expanded && <h4>{role}</h4>}
+            {expanded && <h4>{user?.role}</h4>}
             <Button
               variant="secondary"
               onClick={toggleSidebar}
@@ -34,7 +40,7 @@ const SideMenu = ({ logout, isAuthenticated, role }) => {
             </Button>
           </div>
 
-          {role == "RO" && (
+          {user?.role == "RO" && (
             <Nav className="flex-column">
               <Nav.Link href="/dashboard">
                 <FiInfo className="link-icon" />
@@ -46,7 +52,7 @@ const SideMenu = ({ logout, isAuthenticated, role }) => {
               </Nav.Link>
             </Nav>
           )}
-          {role == "STUDENT" && (
+          {user?.role == "STUDENT" && (
             <Nav className="flex-column">
               <Nav.Link href="/services">
                 <FiSettings className="link-icon" />
@@ -72,7 +78,7 @@ const SideMenu = ({ logout, isAuthenticated, role }) => {
 
 const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
-  role: state.auth.role,
+  user: state.auth.user,
 });
 
 export default connect(mapStateToProps, { logout })(SideMenu);
