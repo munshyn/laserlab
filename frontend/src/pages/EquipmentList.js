@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button, Modal } from "react-bootstrap";
-import Listing from "../component/Listing";
+import ListingEquipment from "../component/ListingEquipment";
 import utmlogo from "../assets/utm-logo.svg";
 import { connect } from "react-redux";
 import { getAllEquipment, deleteEquipment } from "../actions/equipment";
 
-const EquipmentList = ({ equipments, getAllEquipment, deleteEquipment, isAuthenticated }) => {
+const EquipmentList = ({ equipments, getAllEquipment, deleteEquipment }) => {
   const [deleteId, setDeleteId] = useState("");
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 
   useEffect(() => {
     getAllEquipment();
     console.log(equipments);
-    console.log(isAuthenticated);
   }, [getAllEquipment]);
 
   const onDelete = (equipmentId) => {
@@ -22,10 +21,8 @@ const EquipmentList = ({ equipments, getAllEquipment, deleteEquipment, isAuthent
   };
 
   const confirmDelete = async () => {
-    const data = await deleteEquipment(deleteId);
+    await deleteEquipment(deleteId);
 
-    // if (data == "SUCCESS") setEditSuccess("true");
-    // else setEditSuccess("false");
     cancelDelete();
   };
 
@@ -44,13 +41,13 @@ const EquipmentList = ({ equipments, getAllEquipment, deleteEquipment, isAuthent
         <h1>List of Equipments</h1>
       </div>
       <div className="listing-container">
-        <div className="listing-header">
+        <div className="listing-header mb-3">
           <Link to="/add-equipment">
             <Button variant="primary">Add New Equipment</Button>
           </Link>
           {/* <input type="text" placeholder="Search" className="listing-search" /> */}
         </div>
-        <Listing items={equipments} onDelete={onDelete} />
+        <ListingEquipment items={equipments} onDelete={onDelete} />
       <Modal show={showDeleteConfirmation} onHide={cancelDelete}>
         <Modal.Header>
           <Modal.Title>Confirm Delete</Modal.Title>
@@ -71,7 +68,6 @@ const EquipmentList = ({ equipments, getAllEquipment, deleteEquipment, isAuthent
 };
 
 const mapStateToProps = (state) => ({
-  isAuthenticated: state.auth.isAuthenticated,
   // user: state.auth.user,
   equipments: state.equipment,
 });

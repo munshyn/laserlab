@@ -16,6 +16,7 @@ import "./App.css";
 import RequireAuth from "./pages/RequireAuth";
 import Services from "./pages/Services";
 import ServiceAppForm from "./pages/ServiceAppForm";
+import ServicesAppList from "./pages/ServicesAppList";
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
             <Route path="/edit-equipment" element={<EditEquipment />} />
             <Route path="/services" element={<Services />} />
             <Route path="/service-form" element={<ServiceAppForm />} />
+            <Route path="/servicesapp-list" element={<ServicesAppList />} />
           </Route>
         </Routes>
       </Layout>

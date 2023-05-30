@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button, Table, Dropdown } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
-const Listing = ({ items, onDelete }) => {
+const ListingEquipment = ({ items, onDelete }) => {
   const [showActions, setShowActions] = useState(null);
   const navigate = useNavigate();
 
@@ -19,16 +19,16 @@ const Listing = ({ items, onDelete }) => {
   };
 
   return (
-
     <Table striped hover bordered={false} className="listing-content">
       <thead>
-        <tr>
+        <tr style={{ textAlign: "center" }}>
           <th>#</th>
           <th>Registration Number</th>
           <th>Name</th>
           <th>Location</th>
           <th>Quantity</th>
           <th>Status</th>
+          <th>Rentable</th>
           <th>Availability</th>
           <th>Registered</th>
           <th></th>
@@ -43,17 +43,16 @@ const Listing = ({ items, onDelete }) => {
             <td>{item.location}</td>
             <td>{item.quantity}</td>
             <td>{item.status}</td>
-            <td>{item.availability}</td>
-            <td>{item.registered}</td>
+            <td>
+              {item.hasService ? (
+                <p style={{ color: "green" }}>Yes</p>
+              ) : (
+                <p style={{ color: "red" }}>No</p>
+              )}
+            </td>
+            <td>{item.availability ? "Available" : "Not Available"}</td>
+            <td>{item.registered ? "Yes" : "No"}</td>
             <td className="listing-buttons">
-              {/* <Button variant="info">
-                <Link style={{ textDecoration: 'none', color: 'white'}} to={{ pathname: "/edit-equipment", state: { equipment: item } }}>
-                  Edit
-                </Link>
-              </Button>
-              <Button variant="danger" onClick={() => onDelete(item.equipmentId)}>
-                Delete
-              </Button> */}
               <Dropdown
                 show={showActions === item.equipmentId}
                 onToggle={() => handleToggleActions(item.equipmentId)}
@@ -85,4 +84,4 @@ const Listing = ({ items, onDelete }) => {
   );
 };
 
-export default Listing;
+export default ListingEquipment;

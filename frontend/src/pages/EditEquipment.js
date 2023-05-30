@@ -20,6 +20,7 @@ const EditEquipment = ({ updateEquipment }) => {
   const [qty, setQty] = useState(equipment.quantity);
   const [location, setLocation] = useState(equipment.location);
   const [registered, setRegistered] = useState(equipment.registered);
+  const [hasService, setHasService] = useState(equipment.hasService);
   const [availability, setAvailability] = useState(equipment.availability);
   const [price, setPrice] = useState(equipment.price);
   const [status, setStatus] = useState(equipment.status);
@@ -38,6 +39,7 @@ const EditEquipment = ({ updateEquipment }) => {
       price: price,
       status: status,
       availability: availability,
+      hasService: hasService,
     };
 
     const data = await updateEquipment(updatedEquipment, equipment.equipmentId);
@@ -154,6 +156,25 @@ const EditEquipment = ({ updateEquipment }) => {
                 value="false"
                 checked={!registered}
                 onChange={(e) => setRegistered(e.target.value === "true")}
+              />
+            </Form.Group>
+            <Form.Group as={Col} className="mb-3" controlId="formBasicRentable">
+              <Form.Label>Is the equipment rentable?</Form.Label>
+              <Form.Check
+                type="radio"
+                name="hasService"
+                label="Yes"
+                value="true"
+                checked={hasService}
+                onChange={(e) => setHasService(e.target.value === "true")}
+              />
+              <Form.Check
+                type="radio"
+                name="hasService"
+                label="No"
+                value="false"
+                checked={!hasService}
+                onChange={(e) => setHasService(e.target.value === "true")}
               />
             </Form.Group>
             <Form.Group

@@ -50,6 +50,26 @@ const SideMenu = ({ logout, isAuthenticated, user }) => {
                 <FiInfo className="link-icon" />
                 {expanded && <p>Equipments</p>}
               </Nav.Link>
+              <Nav.Link href="/servicesapp-list">
+                <FiInfo className="link-icon" />
+                {expanded && <p>Services Application</p>}
+              </Nav.Link>
+            </Nav>
+          )}
+          {user?.role == "LS" && (
+            <Nav className="flex-column">
+              <Nav.Link href="/dashboard">
+                <FiInfo className="link-icon" />
+                {expanded && <p>Dashboard</p>}
+              </Nav.Link>
+              <Nav.Link href="/equipment-list">
+                <FiInfo className="link-icon" />
+                {expanded && <p>Equipments</p>}
+              </Nav.Link>
+              <Nav.Link href="/servicesapp-list">
+                <FiInfo className="link-icon" />
+                {expanded && <p>Services Application</p>}
+              </Nav.Link>
             </Nav>
           )}
           {user?.role == "STUDENT" && (
@@ -57,6 +77,10 @@ const SideMenu = ({ logout, isAuthenticated, user }) => {
               <Nav.Link href="/services">
                 <FiSettings className="link-icon" />
                 {expanded && <p>Services</p>}
+              </Nav.Link>
+              <Nav.Link href="/servicesapp-list">
+                <FiInfo className="link-icon" />
+                {expanded && <p>Services Application</p>}
               </Nav.Link>
             </Nav>
           )}

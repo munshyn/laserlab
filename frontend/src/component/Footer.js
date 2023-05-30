@@ -9,22 +9,19 @@ import fax from "../assets/fax.svg";
 const Footer = () => {
   return (
     <footer className="footer">
-      <Container fluid>
-        <Row>
-          <Col>
+          <div>
             <h3 className="footer-heading">About Us</h3>
             <p className="footer-paragraph">
               Laser Research Centre (LRC) is a leading research center focusing
               on laser <br/> and photonics technology, Plasma Physics and Fusion, and
               Nano-materials & structures. <br/>Laser Center is the first centre in
               the Malaysia to provide facilities and <br/>expertise for postgraduate
-              research in field of Laser Technology and we continue this today
+              research in field of Laser Technology and we continue this today <br/>
               through our constantly evolving latest research activates and
               facilities and delivered by world-leading experts.
             </p>
-          </Col>
-          <Col></Col>
-          <Col>
+          </div>
+          <div>
             <h3 className="footer-heading">Contact Us</h3>
             <Row>
               <Col>
@@ -67,9 +64,7 @@ const Footer = () => {
                 </div>
               </Col>
             </Row>
-          </Col>
-        </Row>
-      </Container>
+          </div>
     </footer>
   );
 };

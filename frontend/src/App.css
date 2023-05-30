@@ -179,6 +179,8 @@ a{
 }
 
 .footer {
+  display: flex;
+  justify-content: space-between;
   background-color: #373737;
   color: #fff;
   padding: 2rem 10rem;
@@ -209,7 +211,52 @@ a{
   .footer {
     position: static;
   }
+} 
+
+@media (max-width: 768px) {
+  .sidebar {
+    padding: 5px;
+    width: 70px;
+  }
+
+  .sidebar.expanded {
+    width: 150px;
+  }
+
+  .sidebar-header,
+  .sidebar .nav-link {
+    padding: 5px;
+    margin-bottom: 5px;
+  }
+
+  .header h2,
+  .header-img h1 {
+    font-size: 3em;
+  }
+
+  .content {
+    width: 90vw;
+    flex-direction: column;
+    margin-bottom: 2rem;
+  }
+
+  .greetings,
+  .login-form {
+    padding: 2rem 2rem;
+    width: 100%;
+  }
+
+  .center-form {
+    width: 80vw;
+    padding: 5vh 2vw;
+  }
+
+  .footer {
+    flex-direction: column;
+    padding: 2rem 1rem;
+  }
 }
+
 
 .box-container {
   display: flex;
@@ -254,10 +301,15 @@ a{
   height: 60vh;
 }
 
+.listing-header {
+  /* border: 1px solid #ccc; */
+  width: 10vw;
+  margin-bottom: 2rem;
+}
+
 .listing-content .listing-item td {
-  /* width: 80%; */
-  /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
-  padding: 20px;
+  text-align: center;
+  padding: 20px 0;
 }
 
 .custom-list {

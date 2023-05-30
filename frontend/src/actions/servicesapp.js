@@ -9,7 +9,7 @@ import {
 } from "./types";
 
 export const applyService =
-  (serviceApp, name, phone_number) => async (dispatch) => {
+  (serviceApp) => async (dispatch) => {
     const config = {
       headers: {
         "Content-Type": "application/json",
@@ -19,6 +19,9 @@ export const applyService =
     };
 
     const body = JSON.stringify(serviceApp);
+    const name = serviceApp.name;
+    const phone_number = serviceApp.phone_number;
+    
     const userbody = JSON.stringify({ name, phone_number });
 
     const user = JSON.parse(localStorage.getItem("user"));
@@ -128,6 +131,8 @@ export const getAllServicesApp = (appType) => async (dispatch) => {
           payload: res.data,
         });
 
+        console.log(res.data)
+
         return "SUCCESS";
       } catch (err) {
         return "FAILED";
@@ -155,7 +160,7 @@ export const getAllServicesApp = (appType) => async (dispatch) => {
     if (appType == "Rental") {
       try {
         const res = await axios.get(
-          `${process.env.REACT_APP_API_URL}/service/rental/lc/?isApproved=1`,
+          `${process.env.REACT_APP_API_URL}/service/rental/lc/?staffId=${userId}`,
           config
         );
 
@@ -171,7 +176,7 @@ export const getAllServicesApp = (appType) => async (dispatch) => {
     } else if (appType == "Sample") {
       try {
         const res = await axios.get(
-          `${process.env.REACT_APP_API_URL}/service/sample/lc/?isApproved=1`,
+          `${process.env.REACT_APP_API_URL}/service/sample/lc/?staffId=${userId}`,
           config
         );
 

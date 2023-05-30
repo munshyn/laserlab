@@ -24,7 +24,7 @@ const ServiceAppForm = ({
   const [appType, setAppType] = useState("");
   const [name, setName] = useState(user.name);
   const [svName, setSvName] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState(user.phone_number || "");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [status, setStatus] = useState("Pending");
 
   const [qty, setQty] = useState("");
@@ -74,11 +74,20 @@ const ServiceAppForm = ({
     }
     console.log(user.name);
   }, [appType, fetchEquipment, getAllEquipment]);
+
+  useEffect(() => {
+    if (user.phone_number !== null) {
+      const arr = user.phone_number.split(" ", 2);
+      setPhoneNumber(arr[1]);
+    }
+    console.log(user.phone_number)
+  }, [user]);
   
   const onSubmit = async (e) => {
     e.preventDefault();
     
     let serviceApp = null;
+    let phone_number = `+60 ${phoneNumber}`;
     
     if (appType === "Rental") {
       const rentApp = {
@@ -87,13 +96,13 @@ const ServiceAppForm = ({
         duration: `P${duration}D`,
         rentDate: rentDate,
         status: status,
+        name: name,
+        phone_number: phone_number,
         userId: user.id,
         equipmentId: equipmentId,
       };
       
       serviceApp = rentApp;
-      console.log(rentApp.duration)
-      console.log(rentApp.rentDate)
     } else if (appType === "Sample") {
       const sampleApp = {
         appType: appType,
@@ -101,13 +110,15 @@ const ServiceAppForm = ({
         quantity: qty,
         type: sampleType,
         status: status,
+        name: name,
+        phone_number: phone_number,
         userId: user.id,
       };
       
       serviceApp = sampleApp;
     }
 
-    const data = await applyService(serviceApp, name, `+60 ${phoneNumber}`);
+    const data = await applyService(serviceApp);
 
     if (data == "SUCCESS") setAddSuccess("true");
     else setAddSuccess("false");

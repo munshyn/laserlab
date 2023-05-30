@@ -6,6 +6,7 @@ from equipments.models import Equipment
 
 class RentalSerializer(serializers.ModelSerializer):
     userId = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    staffInCharged = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), required=False)
     equipmentId = serializers.PrimaryKeyRelatedField(queryset=Equipment.objects.all())
     
     class Meta:
@@ -14,6 +15,7 @@ class RentalSerializer(serializers.ModelSerializer):
 
 class SampleSerializer(serializers.ModelSerializer):
     userId = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    staffInCharged = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), required=False)
     
     class Meta:
         model = Sample

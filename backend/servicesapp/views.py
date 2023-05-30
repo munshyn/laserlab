@@ -12,17 +12,16 @@ class RentalLC(ListCreateAPIView, ListModelMixin, CreateModelMixin):
 
     def get_queryset(self):
         userId = self.request.query_params.get('userId')
-        approved = self.request.query_params.get('isApproved')
+        staff = self.request.query_params.get('staffId')
         queryset = Rental.objects.all()
 
         if userId:
             queryset = queryset.filter(userId=userId)
 
-        if approved:
-            queryset = queryset.filter(isApproved=True)
+        if staff:
+            queryset = queryset.filter(staffInCharged=staff)
 
         return queryset
-
 
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
@@ -46,14 +45,14 @@ class SampleLC(ListCreateAPIView, ListModelMixin, CreateModelMixin):
 
     def get_queryset(self):
         userId = self.request.query_params.get('userId')
-        approved = self.request.query_params.get('isApproved')
+        staff = self.request.query_params.get('staffId')
         queryset = Sample.objects.all()
 
         if userId:
             queryset = queryset.filter(userId=userId)
 
-        if approved:
-            queryset = queryset.filter(isApproved=True)
+        if staff:
+            queryset = queryset.filter(staffInCharged=staff)
 
         return queryset
 

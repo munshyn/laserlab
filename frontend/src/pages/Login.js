@@ -16,17 +16,6 @@ const Login = ({ login, isAuthenticated, user }) => {
 
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   if (isAuthenticated) {
-  //     console.log(isAuthenticated)
-  //     if (user?.role == "RO") {
-  //       navigate("/dashboard");
-  //     } else {
-  //       navigate("/services");
-  //     }
-  //   }
-  // }, []);
-
   useEffect(() => {
     setErrMsg("");
     setFail("");
@@ -41,8 +30,10 @@ const Login = ({ login, isAuthenticated, user }) => {
       setFail(true);
     } else {
       setFail(false);
-      if (data?.role == "RO") {
+      if (data?.role === "RO") {
         navigate("/dashboard");
+      } else if(data?.role === "LS"){
+        navigate("/servicesapp-list");
       } else {
         navigate("/services");
       }
