@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import { getAllServicesApp } from "../actions/servicesapp";
 
 const ServicesAppList = ({ servicesApp, getAllServicesApp, user }) => {
-  const [key, setKey] = useState("pending");
+  const [key, setKey] = useState("0");
   const [appType, setAppType] = useState("Rental");
 
   useEffect(() => {
@@ -16,7 +16,7 @@ const ServicesAppList = ({ servicesApp, getAllServicesApp, user }) => {
 
   useEffect(() => {
     if (user.role === "LS") {
-      setKey("approved");
+      setKey("2");
     }
   }, []);
 
@@ -45,29 +45,32 @@ const ServicesAppList = ({ servicesApp, getAllServicesApp, user }) => {
           className="mb-3"
         >
           {user.role !== "LS" && (
-            <Tab eventKey="pending" title="Pending">
+            <Tab eventKey="0" title="Pending">
               <ListingServices
                 items={servicesApp}
                 appType={appType}
-                eventKey="Pending"
-              />
+                eventKey="0"
+                role={user.role}
+                />
             </Tab>
           )}
           {user.role !== "LS" && (
-            <Tab eventKey="rejected" title="Rejected">
+            <Tab eventKey="1" title="Rejected">
               <ListingServices
                 items={servicesApp}
                 appType={appType}
-                eventKey="Rejected"
-              />
+                eventKey="1"
+                role={user.role}
+                />
             </Tab>
           )}
 
-          <Tab eventKey="approved" title="Approved">
+          <Tab eventKey="2" title="Approved">
             <ListingServices
               items={servicesApp}
               appType={appType}
-              eventKey="Approved"
+              eventKey="2"
+              role={user.role}
             />
           </Tab>
         </Tabs>

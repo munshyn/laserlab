@@ -1,18 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { Button, Table, Dropdown } from "react-bootstrap";
+import React from "react";
+import { Table } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
-const ListingServices = ({ items, appType, eventKey }) => {
+const ListingServices = ({ items, appType, eventKey, role }) => {
   const navigate = useNavigate();
-
-  // const filteredItems = items.filter((item) => item.status === eventKey);
   const filteredItems = Array.isArray(items)
-    ? items.filter((item) => item.status === eventKey)
+    ? items.filter((item) => item.isApproved === parseInt(eventKey))
     : [];
 
   const onManage = (serviceApp) => {
     navigate("/manage-serviceapp", { state: { serviceApp } });
-  };
+  };  
 
   return (
     <>
@@ -21,8 +19,8 @@ const ListingServices = ({ items, appType, eventKey }) => {
           <thead>
             <tr style={{ textAlign: "center" }}>
               <th>#</th>
-              <th>Name</th>
-              <th>Phone Number</th>
+              {role !== "STUDENT" && <th>Name</th>}
+              {role !== "STUDENT" && <th>Phone Number</th>}
               <th>Supervisor</th>
               <th>Status</th>
               <th>Quantity</th>
@@ -39,8 +37,8 @@ const ListingServices = ({ items, appType, eventKey }) => {
                 style={{ cursor: "pointer" }}
               >
                 <td>{index + 1}</td>
-                <td>{item.name}</td>
-                <td>{item.phone_number}</td>
+                {role !== "STUDENT" && <td>{item.name}</td>}
+                {role !== "STUDENT" && <td>{item.phone_number}</td>}
                 <td>{item.svName}</td>
                 <td>{item.status}</td>
                 <td>{item.quantity}</td>
@@ -55,8 +53,9 @@ const ListingServices = ({ items, appType, eventKey }) => {
           <thead>
             <tr style={{ textAlign: "center" }}>
               <th>#</th>
-              <th>Name</th>
-              <th>Phone Number</th>
+              <th>Equipment</th>
+              {role !== "STUDENT" && <th>Name</th>}
+              {role !== "STUDENT" && <th>Phone Number</th>}
               <th>Supervisor</th>
               <th>Status</th>
               <th>Rental Date</th>
@@ -72,8 +71,9 @@ const ListingServices = ({ items, appType, eventKey }) => {
                 style={{ cursor: "pointer" }}
               >
                 <td>{index + 1}</td>
-                <td>{item.name}</td>
-                <td>{item.phone_number}</td>
+                <td>{item.equipmentName}</td>
+                {role !== "STUDENT" && <td>{item.name}</td>}
+                {role !== "STUDENT" && <td>{item.phone_number}</td>}
                 <td>{item.svName}</td>
                 <td>{item.status}</td>
                 <td>{new Date(item.rentDate).toLocaleDateString()}</td>

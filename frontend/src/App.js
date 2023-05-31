@@ -13,10 +13,11 @@ import { Provider } from "react-redux";
 import store from "./store";
 import Layout from "./hocs/Layout";
 import "./App.css";
-import RequireAuth from "./pages/RequireAuth";
+import RequireAuth from "./hocs/RequireAuth";
 import Services from "./pages/Services";
 import ServiceAppForm from "./pages/ServiceAppForm";
 import ServicesAppList from "./pages/ServicesAppList";
+import ManageServicesApp from "./pages/ManageServicesApp";
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
             <Route path="/services" element={<Services />} />
             <Route path="/service-form" element={<ServiceAppForm />} />
             <Route path="/servicesapp-list" element={<ServicesAppList />} />
+            <Route path="/manage-serviceapp" element={<ManageServicesApp />} />
           </Route>
         </Routes>
       </Layout>

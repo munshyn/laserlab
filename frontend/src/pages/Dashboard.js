@@ -3,18 +3,10 @@ import React, { useState, useEffect } from "react";
 import utmlogo from "../assets/utm-logo.svg";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
-import { logout } from "../actions/auth";
 import Box from "../component/Box";
 import { FiInfo } from "react-icons/fi";
 
-const Dashboard = ({ user }) => {
-  // const navigate = useNavigate();
-
-  // useEffect(() => {
-    
-  // }, []);
-
-  
+const Dashboard = () => {
 
   return (
     <main className="main-content">
@@ -40,4 +32,4 @@ const mapStateToProps = (state) => ({
   user: state.auth.user,
 });
 
-export default connect(mapStateToProps, { logout })(Dashboard);
+export default connect(mapStateToProps, null)(Dashboard);

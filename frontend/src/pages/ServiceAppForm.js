@@ -8,8 +8,6 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Alert from "react-bootstrap/Alert";
 import utmlogo from "../assets/utm-logo.svg";
-import { Link } from "react-router-dom";
-// import { Row, Col } from "react-bootstrap/esm";
 import InputGroup from "react-bootstrap/InputGroup";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -25,8 +23,6 @@ const ServiceAppForm = ({
   const [name, setName] = useState(user.name);
   const [svName, setSvName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [status, setStatus] = useState("Pending");
-
   const [qty, setQty] = useState("");
   const [sampleType, setSampleType] = useState("");
 
@@ -34,6 +30,7 @@ const ServiceAppForm = ({
 
   const [fetchEquipment, setFetchEquipment] = useState(false);
   const [equipmentId, setEquipmentId] = useState("");
+  const [equipmentName, setEquipmentName] = useState("");
   const [rentDate, setRentDate] = useState(null);
   const [returnDate, setReturnDate] = useState(null);
   const [duration, setDuration] = useState(0);
@@ -55,6 +52,19 @@ const ServiceAppForm = ({
   const returnDateFilter = (date) => {
     return date >= rentDate;
   };
+
+  useEffect(() => {
+    setAddSuccess("");
+  }, [
+    appType,
+    svName,
+    duration,
+    rentDate,
+    equipmentId,
+    equipmentName,
+    qty,
+    sampleType,
+  ]);
 
   useEffect(() => {
     if (rentDate && returnDate) {
@@ -80,28 +90,30 @@ const ServiceAppForm = ({
       const arr = user.phone_number.split(" ", 2);
       setPhoneNumber(arr[1]);
     }
-    console.log(user.phone_number)
+    console.log(user.phone_number);
   }, [user]);
-  
+
   const onSubmit = async (e) => {
     e.preventDefault();
-    
+
     let serviceApp = null;
     let phone_number = `+60 ${phoneNumber}`;
-    
+
     if (appType === "Rental") {
       const rentApp = {
         appType: appType,
         svName: svName,
         duration: `P${duration}D`,
         rentDate: rentDate,
-        status: status,
+        status: "Pending",
+        isApproved: 0,
         name: name,
         phone_number: phone_number,
         userId: user.id,
         equipmentId: equipmentId,
+        equipmentName: equipmentName,
       };
-      
+
       serviceApp = rentApp;
     } else if (appType === "Sample") {
       const sampleApp = {
@@ -109,19 +121,32 @@ const ServiceAppForm = ({
         svName: svName,
         quantity: qty,
         type: sampleType,
-        status: status,
+        status: "Pending",
+        isApproved: 0,
         name: name,
         phone_number: phone_number,
         userId: user.id,
       };
-      
+
       serviceApp = sampleApp;
     }
 
     const data = await applyService(serviceApp);
-
-    if (data == "SUCCESS") setAddSuccess("true");
-    else setAddSuccess("false");
+    
+    if (data == "SUCCESS") {
+      setAddSuccess(true);
+      setTimeout(() => {
+        setAppType("");
+        setSvName("");
+        setDuration(0);
+        setRentDate("");
+        setReturnDate("");
+        setSampleType("");
+        setEquipmentId("");
+        setEquipmentName("");
+        setQty("");
+      }, 3000);
+    } else setAddSuccess(false);
   };
 
   function popup_box() {
@@ -151,7 +176,7 @@ const ServiceAppForm = ({
       </div>
       <div className="container-md">
         {popup_box()}
-        <Form onSubmit={(e) => onSubmit(e)}>
+        <Form onSubmit={(e) => onSubmit(e)} autoComplete="off">
           <div className="service-form">
             <div className="left-form">
               <Form.Group className="mb-3" controlId="formBasicName">
@@ -168,6 +193,7 @@ const ServiceAppForm = ({
                 <InputGroup>
                   <InputGroup.Text>+60</InputGroup.Text>
                   <Form.Control
+                    required
                     type="text"
                     placeholder="Enter your phone number"
                     value={phoneNumber}
@@ -220,7 +246,14 @@ const ServiceAppForm = ({
                     <Form.Select
                       required
                       value={equipmentId}
-                      onChange={(e) => setEquipmentId(e.target.value)}
+                      onChange={(e) => {
+                        const selectedOption = equipments?.find(
+                          (item) =>
+                            item.equipmentId === parseInt(e.target.value)
+                        );
+                        setEquipmentId(selectedOption?.equipmentId);
+                        setEquipmentName(selectedOption?.name);
+                      }}
                     >
                       <option value="">Choose</option>
                       {equipments?.map((item, index) => {
@@ -327,9 +360,11 @@ const ServiceAppForm = ({
           {appType === "" ? (
             <></>
           ) : (
-            <Button variant="success" type="submit">
-              Submit
-            </Button>
+            <div className="d-flex justify-content-center mt-3">
+              <Button variant="success" type="submit">
+                Apply
+              </Button>
+            </div>
           )}
         </Form>
       </div>

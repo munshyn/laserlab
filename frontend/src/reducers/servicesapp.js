@@ -6,7 +6,7 @@ import {
   DELETE_SERVICE,
 } from "../actions/types";
 
-const initialState = {};
+const initialState = [];
 
 export default function (servicesApp = initialState, action) {
   const { type, payload } = action;

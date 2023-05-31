@@ -77,6 +77,8 @@ export const getEquipment = (equipmentId) => async (dispatch) => {
       config
     );
 
+    console.log(res.data.name)
+
     dispatch({
       type: GET_EQUIPMENT,
       payload: res.data,

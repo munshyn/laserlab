@@ -8,102 +8,93 @@ import {
   USER_LOADED_SUCCESS,
 } from "./types";
 
-export const applyService =
-  (serviceApp) => async (dispatch) => {
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `JWT ${localStorage.getItem("access")}`,
-        Accept: "application/json",
-      },
-    };
+export const applyService = (serviceApp) => async (dispatch) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `JWT ${localStorage.getItem("access")}`,
+      Accept: "application/json",
+    },
+  };
 
-    const body = JSON.stringify(serviceApp);
-    const name = serviceApp.name;
-    const phone_number = serviceApp.phone_number;
-    
-    const userbody = JSON.stringify({ name, phone_number });
+  const body = JSON.stringify(serviceApp);
+  const { name, phone_number } = serviceApp;
 
-    const user = JSON.parse(localStorage.getItem("user"));
-    const userId = user.id;
+  const user = JSON.parse(localStorage.getItem("user"));
+  const userId = user.id;
 
-    if (serviceApp.appType == "Rental") {
-      try {
-        const res = await axios.post(
-          `${process.env.REACT_APP_API_URL}/service/rental/lc/`,
-          body,
-          config
-        );
+  const updateUser = async () => {
+    const userBody = JSON.stringify({ name, phone_number });
 
-        const userres = await axios.put(
-          `${process.env.REACT_APP_API_URL}/auth/rud/${userId}/`,
-          userbody,
-          config
-        );
+    try {
+      await axios.put(
+        `${process.env.REACT_APP_API_URL}/auth/rud/${userId}/`,
+        userBody,
+        config
+      );
 
-        dispatch({
-          type: CREATE_SERVICE,
-          payload: res.data,
-        });
+      const updatedUser = {
+        id: userId,
+        email: user.email,
+        name: name,
+        role: user.role,
+        phone_number: phone_number,
+      };
 
-        const updatedUser = {
-          id: userId,
-          email: user.email,
-          name: name,
-          role: user.role,
-          phone_number: phone_number,
-        }
-
-        dispatch({
-          type: USER_LOADED_SUCCESS,
-          payload: updatedUser,
-        });
-
-        return "SUCCESS";
-      } catch (err) {
-        return "FAILED";
-      }
-    } else if (serviceApp.appType == "Sample") {
-      console.log(body)
-      try {
-        const res = await axios.post(
-          `${process.env.REACT_APP_API_URL}/service/sample/lc/`,
-          body,
-          config
-        );
-
-        const userres = await axios.put(
-          `${process.env.REACT_APP_API_URL}/auth/rud/${userId}/`,
-          userbody,
-          config
-        );
-
-        dispatch({
-          type: CREATE_SERVICE,
-          payload: res.data,
-        });
-
-        const updatedUser = {
-          id: userId,
-          email: user.email,
-          name: name,
-          role: user.role,
-          phone_number: phone_number,
-        }
-
-        dispatch({
-          type: USER_LOADED_SUCCESS,
-          payload: updatedUser,
-        });
-
-        return "SUCCESS";
-      } catch (err) {
-        return "FAILED";
-      }
-    } else {
-      return "Please specify the service type";
+      dispatch({
+        type: USER_LOADED_SUCCESS,
+        payload: updatedUser,
+      });
+    } catch (err) {
+      console.error(err);
     }
   };
+
+  if (serviceApp.appType === "Rental") {
+    try {
+      const res = await axios.post(
+        `${process.env.REACT_APP_API_URL}/service/rental/lc/`,
+        body,
+        config
+      );
+
+      dispatch({
+        type: CREATE_SERVICE,
+        payload: res.data,
+      });
+
+      await updateUser();
+
+      return "SUCCESS";
+    } catch (err) {
+      console.error(err);
+      return "FAILED";
+    }
+  } else if (serviceApp.appType === "Sample") {
+    try {
+      const res = await axios.post(
+        `${process.env.REACT_APP_API_URL}/service/sample/lc/`,
+        body,
+        config
+      );
+
+      dispatch({
+        type: CREATE_SERVICE,
+        payload: res.data,
+      });
+
+      await updateUser();
+
+      return "SUCCESS";
+    } catch (err) {
+      console.error(err);
+      return "FAILED";
+    }
+  } else {
+    return "Please specify the service type";
+  }
+};
+
 
 export const getAllServicesApp = (appType) => async (dispatch) => {
   const config = {

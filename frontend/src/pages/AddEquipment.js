@@ -96,11 +96,12 @@ const AddEquipment = ({ equipments, addEquipment }) => {
       </div>
       <div className="container-md">
         {popup_box()}
-        <Form onSubmit={(e) => onSubmit(e)}>
+        <Form onSubmit={(e) => onSubmit(e)} autoComplete="off" >
           <Row className="mb-3">
             <Form.Group as={Col} className="mb-3" controlId="formBasicRegNum">
               <Form.Label>Registration Number</Form.Label>
               <Form.Control
+                required
                 type="text"
                 placeholder="Enter Registration Number"
                 value={regNum}
@@ -111,6 +112,7 @@ const AddEquipment = ({ equipments, addEquipment }) => {
             <Form.Group as={Col} className="mb-3" controlId="formBasicName">
               <Form.Label>Name</Form.Label>
               <Form.Control
+                required
                 type="text"
                 placeholder="Enter name"
                 value={name}
@@ -123,6 +125,7 @@ const AddEquipment = ({ equipments, addEquipment }) => {
             <Form.Group as={Col} className="mb-3" controlId="formBasicLocation">
               <Form.Label>Equipment Location</Form.Label>
               <Form.Control
+                required
                 type="text"
                 placeholder="Location"
                 value={location}
@@ -141,6 +144,7 @@ const AddEquipment = ({ equipments, addEquipment }) => {
             <Form.Group as={Col} className="mb-3" controlId="formBasicPrice">
               <Form.Label>Equipment Price (RM)</Form.Label>
               <Form.Control
+                required
                 type="number"
                 placeholder="Price"
                 value={price}
@@ -152,6 +156,7 @@ const AddEquipment = ({ equipments, addEquipment }) => {
             <Form.Group as={Col} className="mb-3" controlId="formBasicStatus">
               <Form.Label>Equipment Status</Form.Label>
               <Form.Control
+                required
                 type="text"
                 placeholder="Status"
                 value={status}
@@ -208,6 +213,7 @@ const AddEquipment = ({ equipments, addEquipment }) => {
             >
               <Form.Label>Availability</Form.Label>
               <Form.Select
+                required
                 value={availability.toString()}
                 onChange={(e) => setAvailability(e.target.value === "true")}
               >
@@ -217,20 +223,16 @@ const AddEquipment = ({ equipments, addEquipment }) => {
               </Form.Select>
             </Form.Group>
           </Row>
-          {/* </div>
-            </div> */}
           <Button variant="success" type="submit">
             Submit
           </Button>
         </Form>
-        {/* </div> */}
       </div>
     </main>
   );
 };
 
 const mapStateToProps = (state) => ({
-  // isAuthenticated: state.auth.isAuthenticated,
   // user: state.auth.user,
   equipments: state.equipment,
 });

@@ -2,7 +2,7 @@ import { useLocation, Navigate, Outlet } from "react-router-dom"
 import { connect } from "react-redux";
 
 const RequireAuth = ({ isAuthenticated }) => {
-    const location = useLocation()
+    const location = useLocation();
 
     return (
         isAuthenticated

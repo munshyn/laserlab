@@ -1,16 +1,12 @@
 import Button from "react-bootstrap/Button";
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import utmlogo from "../assets/utm-logo.svg";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import { logout } from "../actions/auth";
 import Box from "../component/Box";
-import { FiInfo } from "react-icons/fi";
-import { ListGroup } from "react-bootstrap";
+import { Card, ListGroup } from "react-bootstrap";
 
-const Services = ({ user }) => {
-  const navigate = useNavigate();
-
+const Services = () => {
   useEffect(() => {}, []);
 
   const servicesList = [
@@ -38,6 +34,13 @@ const Services = ({ user }) => {
               <ListGroup.Item key={index}>{item}</ListGroup.Item>
             ))}
           </ListGroup>
+          {/* {servicesList.map((item, index) => (
+  <Card key={index} className="custom-card">
+    <Card.Body>
+      <Card.Text>{item}</Card.Text>
+    </Card.Body>
+  </Card>
+))} */}
           <div className="d-flex justify-content-center mt-4">
             <Link to="/service-form">
               <Button variant="success">Apply now</Button>
@@ -53,4 +56,4 @@ const mapStateToProps = (state) => ({
   user: state.auth.user,
 });
 
-export default connect(mapStateToProps, { logout })(Services);
+export default connect(mapStateToProps, null)(Services);
