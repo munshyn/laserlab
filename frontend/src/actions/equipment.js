@@ -8,31 +8,32 @@ import {
 } from "./types";
 
 export const addEquipment = (equipment) => async (dispatch) => {
+  //Function for add equipment
   const config = {
     headers: {
       "Content-Type": "application/json",
-      Authorization: `JWT ${localStorage.getItem("access")}`,
+      Authorization: `JWT ${localStorage.getItem("access")}`, //Requires authentication to call
       Accept: "application/json",
     },
   };
 
-  const body = JSON.stringify(equipment);
-
+  const body = JSON.stringify(equipment); //Stringify the JSON object before
+  //sending the data to backend
   try {
     const res = await axios.post(
-      `${process.env.REACT_APP_API_URL}/equipment/lc/`,
-      body,
+      `${process.env.REACT_APP_API_URL}/equipment/lc/`, //Call the API that is created
+      body, //in the backend
       config
     );
 
     dispatch({
-      type: CREATE_EQUIPMENT,
-      payload: res.data,
+      type: CREATE_EQUIPMENT, //Send retrieved data to
+      payload: res.data, //reducers to update the state
     });
 
-    return "SUCCESS";
+    return "SUCCESS"; //Returns Success message
   } catch (err) {
-    return "FAILED";
+    return "FAILED"; //Returns Failed message
   }
 };
 
@@ -77,14 +78,12 @@ export const getEquipment = (equipmentId) => async (dispatch) => {
       config
     );
 
-    console.log(res.data.name)
-
     dispatch({
       type: GET_EQUIPMENT,
       payload: res.data,
     });
 
-    return "SUCCESS";
+    return res.data;
   } catch (err) {
     return "FAILED";
   }
@@ -102,7 +101,7 @@ export const updateEquipment = (equipment, equipmentId) => async (dispatch) => {
   const body = JSON.stringify(equipment);
 
   try {
-    const res = await axios.put(
+    await axios.put(
       `${process.env.REACT_APP_API_URL}/equipment/rud/${equipmentId}/`,
       body,
       config

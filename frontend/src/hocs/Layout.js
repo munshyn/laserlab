@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { checkTokenExpiration } from "../actions/auth";
-import SideMenu from "../component/SideMenu";
+import SideMenu from "../components/SideMenu";
 
 const Layout = ({ checkTokenExpiration, children }) => {
   useEffect(() => {
@@ -15,7 +15,7 @@ const Layout = ({ checkTokenExpiration, children }) => {
   }, [checkTokenExpiration]);
 
   return (
-    <div className="App">
+    <div className="w-screen">
       <SideMenu />
       {children}
     </div>

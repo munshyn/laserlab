@@ -6,7 +6,7 @@ import Form from "react-bootstrap/Form";
 import Alert from "react-bootstrap/Alert";
 import React, { useState, useEffect } from "react";
 import utmlogo from "../assets/utm-logo.svg";
-import Footer from "../component/Footer";
+import Footer from "../components/Footer";
 
 const ResetPasswordConfirm = ({ reset_password_confirm }) => {
   const [requestSent, setRequestSent] = useState("");

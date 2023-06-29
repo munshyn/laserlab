@@ -1,5 +1,6 @@
 from pathlib import Path
 from datetime import timedelta
+from storages.backends.s3boto3 import S3Boto3Storage
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -36,7 +37,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'rest_framework_simplejwt',
-    'rest_framework_simplejwt.token_blacklist'
+    'rest_framework_simplejwt.token_blacklist',
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -130,6 +132,19 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 AUTH_USER_MODEL = 'accounts.Users'
+
+# Configure the default file storage backend
+DEFAULT_FILE_STORAGE = 'laserlab.storage_backends.S3MediaStorage'
+
+# Configure the S3 storage backend settings
+AWS_ACCESS_KEY_ID = 'AKIAWX6RUKCYUHW6VV2Z'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'utmlaserlab'
+AWS_S3_REGION_NAME = 'ap-southeast-1'
+AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+
+# Configure static files storage if needed
+STATICFILES_STORAGE = 'laserlab.storage_backends.S3StaticStorage'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'

@@ -1,18 +1,18 @@
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
-import Alert from "react-bootstrap/Alert";
+import { Form, Button, Alert, Spinner } from "react-bootstrap";
 import React, { useState, useEffect } from "react";
 import utmlogo from "../assets/utm-logo.svg";
 import { Link, useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
 import { login } from "../actions/auth";
-import Footer from "../component/Footer";
+import Footer from "../components/Footer";
 
 const Login = ({ login, isAuthenticated, user }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errMsg, setErrMsg] = useState("");
   const [login_fail, setFail] = useState("");
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -23,20 +23,25 @@ const Login = ({ login, isAuthenticated, user }) => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     const data = await login(email, password);
     console.log(data);
     if (data.detail) {
       setErrMsg(data.detail);
       setFail(true);
+      setIsLoading(false);
     } else {
       setFail(false);
-      if (data?.role === "RO") {
-        navigate("/dashboard");
-      } else if(data?.role === "LS"){
-        navigate("/servicesapp-list");
-      } else {
-        navigate("/services");
-      }
+      setTimeout(() => {
+        setIsLoading(false);
+        if (data?.role === "RO" || data?.role === "D") {
+          navigate("/dashboard");
+        } else if (data?.role === "LS") {
+          navigate("/servicesapp-list");
+        } else {
+          navigate("/services");
+        }
+      }, 1000);
     }
   };
 
@@ -126,8 +131,8 @@ const Login = ({ login, isAuthenticated, user }) => {
               >
                 Forgot password?
               </Link>
-              <Button variant="success" type="submit">
-                Submit
+              <Button variant="dark" type="submit" disabled={isLoading}>
+                {isLoading ? <Spinner animation="border" size="sm" /> : "Login"}
               </Button>
             </div>
           </Form>

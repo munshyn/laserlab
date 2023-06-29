@@ -5,6 +5,7 @@ import {
   LOGIN_FAIL,
   USER_LOADED_SUCCESS,
   USER_LOADED_FAIL,
+  GET_USERS,
   AUTHENTICATED_SUCCESS,
   AUTHENTICATED_FAIL,
   PASSWORD_RESET_SUCCESS,
@@ -47,6 +48,32 @@ export const load_user = () => async (dispatch) => {
     dispatch({
       type: USER_LOADED_FAIL,
     });
+  }
+};
+
+export const getUsers = () => async (dispatch) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `JWT ${localStorage.getItem("access")}`,
+      Accept: "*/*",
+    },
+  };
+
+  try {
+    const res = await axios.get(
+      `${process.env.REACT_APP_API_URL}/user/lc/`,
+      config
+    );
+
+    dispatch({
+      type: GET_USERS,
+      payload: res.data,
+    });
+
+    return res.data;
+  } catch (err) {
+    return "FAILED";
   }
 };
 
@@ -158,14 +185,14 @@ export const login = (email, password) => async (dispatch) => {
 };
 
 export const signup =
-  (email, name, role, password, re_password) => async (dispatch) => {
+  (email, name, role, password, re_password, isStudent, matrixNum) => async (dispatch) => {
     const config = {
       headers: {
         "Content-Type": "application/json",
       },
     };
 
-    const body = JSON.stringify({ email, name, role, password, re_password });
+    const body = JSON.stringify({ email, name, role, password, re_password, isStudent, matrixNum });
 
     try {
       const res = await axios.post(

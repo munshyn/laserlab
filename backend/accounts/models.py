@@ -2,14 +2,14 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 
 class UsersManager(BaseUserManager):
-    def create_user(self, email, name, role=None, password=None, **extra_fields):
+    def create_user(self, email, name, role=None, isStudent=None, matrixNum=None, password=None, **extra_fields):
         if not email:
             raise ValueError('An email is required')
         if not password:
             raise ValueError('A password is required')
         
         email = self.normalize_email(email)
-        user = self.model(email=email, name=name, role=role, **extra_fields)
+        user = self.model(email=email, name=name, role=role, isStudent=isStudent, matrixNum=matrixNum, **extra_fields)
 
         user.set_password(password)
         user.save()
@@ -38,11 +38,13 @@ class Users(AbstractBaseUser, PermissionsMixin):
     phone_number = models.CharField(max_length=20, blank=True, null=True, unique=True)
     role = models.CharField(max_length=10)
     is_active = models.BooleanField(default=True)
+    isStudent = models.BooleanField(null=True, blank=True, default=False)
+    matrixNum = models.CharField(max_length=20, null=True, blank=True)
 
     objects = UsersManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['name', 'role']
+    REQUIRED_FIELDS = ['name', 'role', 'isStudent', 'matrixNum']
 
     def get_full_name(self):
         return self.name

@@ -3,6 +3,7 @@ import {
   LOGIN_FAIL,
   USER_LOADED_SUCCESS,
   USER_LOADED_FAIL,
+  GET_USERS,
   AUTHENTICATED_SUCCESS,
   AUTHENTICATED_FAIL,
   PASSWORD_RESET_SUCCESS,
@@ -22,6 +23,7 @@ const initialState = {
   expiresAt: localStorage.getItem("expiresAt"),
   isAuthenticated: localStorage.getItem("access") ? true : false,
   user: JSON.parse(localStorage.getItem("user")),
+  users: []
 };
 
 export default function (state = initialState, action) {
@@ -67,6 +69,11 @@ export default function (state = initialState, action) {
       return {
         ...state,
         user: null,
+      };
+    case GET_USERS:
+      return {
+        ...state,
+        users: payload,
       };
     case LOGIN_FAIL:
     case SIGNUP_FAIL:

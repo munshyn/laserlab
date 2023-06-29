@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { Tabs, Tab, Form } from "react-bootstrap";
-import ListingServices from "../component/ListingServicesApp";
-import utmlogo from "../assets/utm-logo.svg";
+import { Tabs, Tab } from "react-bootstrap";
+import ListingServices from "../components/ListingServicesApp";
 import { connect } from "react-redux";
 import { getAllServicesApp } from "../actions/servicesapp";
+import { getUsers } from "../actions/auth";
+import { getAllEquipment } from "../actions/equipment";
 
 const ServicesAppList = ({ servicesApp, getAllServicesApp, user }) => {
   const [key, setKey] = useState("0");
-  const [appType, setAppType] = useState("Rental");
 
   useEffect(() => {
-    getAllServicesApp(appType);
+    getAllServicesApp();
     console.log(servicesApp);
-  }, [getAllServicesApp, appType]);
+  }, [getAllServicesApp]);
 
   useEffect(() => {
     if (user.role === "LS") {
@@ -22,21 +22,12 @@ const ServicesAppList = ({ servicesApp, getAllServicesApp, user }) => {
 
   return (
     <main className="main-content">
-      <div className="utm-logo-start">
-        <img src={utmlogo} alt="logo" />
-      </div>
       <div className="header-img">
-        <h1>List of Service Application</h1>
+        <h1>Lab Service Application</h1>
       </div>
       <div className="listing-container">
         <div className="listing-header">
-          <Form.Select
-            value={appType}
-            onChange={(e) => setAppType(e.target.value)}
-          >
-            <option value="Rental">Rental</option>
-            <option value="Sample">Sample</option>
-          </Form.Select>
+          
         </div>
         <Tabs
           id="controlled-tab-example"
@@ -48,9 +39,8 @@ const ServicesAppList = ({ servicesApp, getAllServicesApp, user }) => {
             <Tab eventKey="0" title="Pending">
               <ListingServices
                 items={servicesApp}
-                appType={appType}
                 eventKey="0"
-                role={user.role}
+                user={user}
                 />
             </Tab>
           )}
@@ -58,9 +48,8 @@ const ServicesAppList = ({ servicesApp, getAllServicesApp, user }) => {
             <Tab eventKey="1" title="Rejected">
               <ListingServices
                 items={servicesApp}
-                appType={appType}
                 eventKey="1"
-                role={user.role}
+                user={user}
                 />
             </Tab>
           )}
@@ -68,9 +57,8 @@ const ServicesAppList = ({ servicesApp, getAllServicesApp, user }) => {
           <Tab eventKey="2" title="Approved">
             <ListingServices
               items={servicesApp}
-              appType={appType}
               eventKey="2"
-              role={user.role}
+              user={user}
             />
           </Tab>
         </Tabs>

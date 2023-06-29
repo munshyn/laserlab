@@ -19,10 +19,9 @@ const ListingEquipment = ({ items, onDelete }) => {
   };
 
   return (
-    <Table striped hover bordered={false} className="listing-content">
+    <Table dark striped hover bordered={false} className="listing-content">
       <thead>
-        <tr style={{ textAlign: "center" }}>
-          <th>#</th>
+        <tr>
           <th>Registration Number</th>
           <th>Name</th>
           <th>Location</th>
@@ -37,7 +36,6 @@ const ListingEquipment = ({ items, onDelete }) => {
       <tbody>
         {items.map((item, index) => (
           <tr key={index} className="listing-item">
-            <td>{index + 1}</td>
             <td>{item.regNum}</td>
             <td>{item.name}</td>
             <td>{item.location}</td>

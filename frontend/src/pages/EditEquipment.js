@@ -1,31 +1,49 @@
 import { useLocation, Link } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { updateEquipment } from "../actions/equipment";
+import { updateEquipment, getEquipment } from "../actions/equipment";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Alert from "react-bootstrap/Alert";
-import utmlogo from "../assets/utm-logo.svg";
 import Col from "react-bootstrap/esm/Col";
 
-const EditEquipment = ({ updateEquipment }) => {
+const EditEquipment = ({ updateEquipment, getEquipment }) => {
   const prevLocation = useLocation();
   const equipment = prevLocation.state?.equipment;
 
   console.log(equipment.regNum);
 
-  const [regNum, setRegNum] = useState(equipment.regNum);
-  const [name, setName] = useState(equipment.name);
-  const [qty, setQty] = useState(equipment.quantity);
-  const [location, setLocation] = useState(equipment.location);
-  const [registered, setRegistered] = useState(equipment.registered);
-  const [hasService, setHasService] = useState(equipment.hasService);
-  const [availability, setAvailability] = useState(equipment.availability);
-  const [price, setPrice] = useState(equipment.price);
-  const [status, setStatus] = useState(equipment.status);
+  const [regNum, setRegNum] = useState("");
+  const [name, setName] = useState("");
+  const [qty, setQty] = useState("");
+  const [location, setLocation] = useState("");
+  const [registered, setRegistered] = useState("");
+  const [hasService, setHasService] = useState("");
+  const [availability, setAvailability] = useState("");
+  const [price, setPrice] = useState("");
+  const [status, setStatus] = useState("");
 
   const [editSuccess, setEditSuccess] = useState("");
+
+  const statuses = ["Damaged", "Require Fix", "Good", "Rented", "Maintenance"];
+
+  const getData = async () => {
+    const equipmentData = await getEquipment(equipment.equipmentId);
+    setRegNum(equipmentData.regNum);
+    setName(equipmentData.name);
+    setQty(equipmentData.quantity);
+    setLocation(equipmentData.location);
+    setRegistered(equipmentData.registered);
+    setHasService(equipmentData.hasService);
+    setAvailability(equipmentData.availability);
+    setPrice(equipmentData.price);
+    setStatus(equipmentData.status);
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -67,9 +85,6 @@ const EditEquipment = ({ updateEquipment }) => {
 
   return (
     <main className="main-content">
-      <div className="utm-logo-start">
-        <img src={utmlogo} alt="logo" />
-      </div>
       <div className="header-img">
         <h1>Edit Equipment</h1>
       </div>
@@ -128,12 +143,18 @@ const EditEquipment = ({ updateEquipment }) => {
           <Row>
             <Form.Group as={Col} className="mb-3" controlId="formBasicStatus">
               <Form.Label>Equipment Status</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Status"
+              <Form.Select
+                required
                 value={status}
                 onChange={(e) => setStatus(e.target.value)}
-              />
+              >
+                <option value="">Choose</option>
+                {statuses.map((status, index) => (
+                  <option key={index} value={status}>
+                    {status}
+                  </option>
+                ))}
+              </Form.Select>
             </Form.Group>
             <Form.Group
               as={Col}
@@ -183,17 +204,16 @@ const EditEquipment = ({ updateEquipment }) => {
               controlId="formBasicAvailability"
             >
               <Form.Label>Availability</Form.Label>
-              <Form.Control
-                as="select"
+              <Form.Select
                 value={availability.toString()}
                 onChange={(e) => setAvailability(e.target.value === "true")}
               >
                 <option value="true">Available</option>
                 <option value="false">Not available</option>
-              </Form.Control>
+              </Form.Select>
             </Form.Group>
           </Row>
-          <Button variant="success" type="submit">
+          <Button variant="dark" type="submit">
             Update
           </Button>
         </Form>
@@ -203,9 +223,7 @@ const EditEquipment = ({ updateEquipment }) => {
 };
 
 const mapStateToProps = (state) => ({
-  // isAuthenticated: state.auth.isAuthenticated,
-  // user: state.auth.user,
-  equipments: state.equipment,
+  equipment: state.equipment,
 });
 
-export default connect(mapStateToProps, { updateEquipment })(EditEquipment);
+export default connect(mapStateToProps, { updateEquipment, getEquipment })(EditEquipment);

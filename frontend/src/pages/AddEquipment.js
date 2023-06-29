@@ -5,8 +5,6 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Alert from "react-bootstrap/Alert";
-import utmlogo from "../assets/utm-logo.svg";
-import { Link } from "react-router-dom";
 import Col from "react-bootstrap/esm/Col";
 
 const AddEquipment = ({ equipments, addEquipment }) => {
@@ -22,6 +20,8 @@ const AddEquipment = ({ equipments, addEquipment }) => {
 
   const [addSuccess, setAddSuccess] = useState("");
 
+  const statuses = ["Damaged", "Require Fix", "Good", "Rented", "Maintenance"];
+
   useEffect(() => {
     setAddSuccess("");
   }, [
@@ -36,11 +36,11 @@ const AddEquipment = ({ equipments, addEquipment }) => {
     status,
   ]);
 
-  const onSubmit = async (e) => {
+  const onSubmit = async (e) => {                     //Function called upon submit
     e.preventDefault();
 
-    const newEquipment = {
-      regNum: regNum,
+    const newEquipment = {                            //Create a new JSON object
+      regNum: regNum,                                 //for new equipment
       name: name,
       quantity: qty,
       location: location,
@@ -51,12 +51,13 @@ const AddEquipment = ({ equipments, addEquipment }) => {
       hasService: hasService,
     };
 
-    const data = await addEquipment(newEquipment);
-
-    if (data == "SUCCESS") {
-      setAddSuccess(true);
-      setTimeout(() => {
-        setRegNum("");
+    const data = await addEquipment(newEquipment);   //Send the new equipment using
+                                                     //the addEquipment function
+    
+    if (data === "SUCCESS") {                         //Process the retrieved data
+      setAddSuccess(true);                           //if it is success, it will
+      setTimeout(() => {                             //give a pop up success message
+        setRegNum("");                               //and reset the form
         setName("");
         setLocation("");
         setPrice("");
@@ -76,7 +77,7 @@ const AddEquipment = ({ equipments, addEquipment }) => {
           <p>Equipment Successfully created</p>
         </Alert>
       );
-    } else if (addSuccess == "") {
+    } else if (addSuccess === "") {
       return <></>;
     } else
       return (
@@ -88,15 +89,12 @@ const AddEquipment = ({ equipments, addEquipment }) => {
 
   return (
     <main className="main-content">
-      <div className="utm-logo-start">
-        <img src={utmlogo} alt="logo" />
-      </div>
       <div className="header-img">
         <h1>Add Equipment</h1>
       </div>
       <div className="container-md">
         {popup_box()}
-        <Form onSubmit={(e) => onSubmit(e)} autoComplete="off" >
+        <Form onSubmit={(e) => onSubmit(e)} autoComplete="off">
           <Row className="mb-3">
             <Form.Group as={Col} className="mb-3" controlId="formBasicRegNum">
               <Form.Label>Registration Number</Form.Label>
@@ -155,14 +153,18 @@ const AddEquipment = ({ equipments, addEquipment }) => {
           <Row className="mb-3">
             <Form.Group as={Col} className="mb-3" controlId="formBasicStatus">
               <Form.Label>Equipment Status</Form.Label>
-              <Form.Control
+              <Form.Select
                 required
-                type="text"
-                placeholder="Status"
                 value={status}
                 onChange={(e) => setStatus(e.target.value)}
-              />
-              <Form.Text className="text-muted">Eg. Good</Form.Text>
+              >
+                <option value="">Choose</option>
+                {statuses.map((status, index) => (
+                  <option key={index} value={status}>
+                    {status}
+                  </option>
+                ))}
+              </Form.Select>
             </Form.Group>
             <Form.Group
               as={Col}
@@ -223,8 +225,8 @@ const AddEquipment = ({ equipments, addEquipment }) => {
               </Form.Select>
             </Form.Group>
           </Row>
-          <Button variant="success" type="submit">
-            Submit
+          <Button variant="dark" type="submit">
+            Add
           </Button>
         </Form>
       </div>

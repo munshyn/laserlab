@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
 
 html, body{
+  font-family: 'Poppins', sans-serif !important;
   padding: 0;
   width: 100%;
   height: 100%;
@@ -10,13 +11,6 @@ a{
   text-decoration: none;
 }
 
-.App {
-  font-family: "Poppins", sans-serif;
-  display: flex;
-  width: 100%;
-  height: 100%;
-} 
-
 .main-content {
   display: flex;
   flex-direction: column;
@@ -24,25 +18,11 @@ a{
 }
 
 .sidebar {
-  background-color: #1e1e1e;
-  padding: 10px;
-  width: 90px;
-  height: 100vh;
-  transition: width 0.3s ease-in-out;
-}
-
-.sidebar.expanded {
-  width: 200px;
-}
-
-.sidebar-header {
+  background-color: #ffffff;
+  width: 13vw;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px;
-  margin-bottom: 10px;
-  background-color: #ccc;
-  border-radius: 8px;
+  flex-direction: column;
+  color: #000000;
 }
 
 .sidebar-footer {
@@ -50,32 +30,24 @@ a{
   text-align: center;
 }
 
-.toggle-button {
-  margin: 10px;
-}
-
-.link-icon {
-  margin: 5px;
-}
-
-.sidebar .nav-link > p {
-  margin: 5px;
-  font-size: 1em;
+.link-icon,
+.sidebar .nav-link > h4 {
+  margin: 5px 15px;
 }
 
 .sidebar .nav-link {
-  display: flex;
   align-items: center;
+  display: flex;
   padding: 10px;
-  margin-bottom: 5px;
+  margin: 5px 10px;
   border-radius: 5px;
   text-decoration: none;
-  color: #ffffff;
+  color: #000000;
 }
 
 .sidebar .nav-link:hover {
-  background-color: #e4e4e4;
-  color: #000000;
+  background-color: #202020;
+  color: #ffffff;
 }
 
 .logout-button {
@@ -110,7 +82,7 @@ a{
   color: white;
   padding: 3vh;
   margin-bottom: 5vh;
-  background-image: linear-gradient(rgba(255,255,255,0.2), rgba(255,255,255,0.3)), url("./assets/laser.svg");
+  background-image: linear-gradient(rgba(255,255,255,0.2), rgba(255,255,255,0.3)), url("../assets/laser.svg");
   background-size: cover;
   background-position: 0 70%;
   box-shadow: 6px 8px 10px grey;
@@ -308,14 +280,9 @@ a{
   height: 60vh;
 }
 
-.listing-header {
-  width: 10vw;
-  margin-bottom: 2rem;
-}
-
 .listing-content .listing-item td {
-  text-align: center;
-  padding: 20px 0;
+  text-align: left;
+  padding: 20px 20px;
   font-size: 18px;
 }
 
@@ -333,25 +300,14 @@ a{
 
 .service-form {
   display: flex;
-  width: 100%;
-  margin: 0 auto auto auto;
-}
-.left-form {
-  border-radius: 10px;
-  padding: 15px;
-  box-shadow: 0px 8px 10px grey;
-  width: 50%;
-}
-.right-form {
-  border-radius: 10px;
-  padding: 15px;
-  box-shadow: 0px 8px 10px grey;
-  width: 50%;
+  flex-direction: column;
+  width: 70%;
+  margin: auto;
 }
 
 .content-header {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
 }
 
 /*.listing-item {

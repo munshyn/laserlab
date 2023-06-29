@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import utmlogo from "../assets/utm-logo.svg";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import Box from "../component/Box";
+import Box from "../components/Box";
 import { Card, ListGroup } from "react-bootstrap";
 
 const Services = () => {
@@ -20,9 +20,6 @@ const Services = () => {
 
   return (
     <main className="main-content">
-      <div className="utm-logo-start">
-        <img src={utmlogo} alt="logo" />
-      </div>
       <div className="header-img">
         <h1>Services</h1>
       </div>

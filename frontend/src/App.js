@@ -12,10 +12,11 @@ import { Route, Routes } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./store";
 import Layout from "./hocs/Layout";
-import "./App.css";
+import "./styles/App.css";
 import RequireAuth from "./hocs/RequireAuth";
 import Services from "./pages/Services";
 import ServiceAppForm from "./pages/ServiceAppForm";
+import ServiceApp from "./pages/ServiceApp";
 import ServicesAppList from "./pages/ServicesAppList";
 import ManageServicesApp from "./pages/ManageServicesApp";
 
@@ -24,13 +25,19 @@ function App() {
     <Provider store={store}>
       <Layout>
         <Routes>
+          {/*Below routes are public, it does not require authentication*/}
           <Route path="/login" element={<Login />}></Route>
           <Route path="/register" element={<Register />}></Route>
           <Route path="/activate/:uid/:token" element={<Activate />}></Route>
           <Route path="/reset-password" element={<ResetPassword />}></Route>
-          <Route path="/password/reset/confirm/:uid/:token"element={<ResetPasswordConfirm />}></Route>
+          <Route
+            path="/password/reset/confirm/:uid/:token"
+            element={<ResetPasswordConfirm />}
+          ></Route>
 
-          <Route element={<RequireAuth />}>
+          {/*Below routes are protected, RequireAuth checks if user is authenticated or not,
+          if not authenticated, it will bring user back to login page*/}
+          <Route element={<RequireAuth />}> 
             <Route path="/" element={<Home />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/equipment-list" element={<EquipmentList />} />
@@ -40,6 +47,7 @@ function App() {
             <Route path="/service-form" element={<ServiceAppForm />} />
             <Route path="/servicesapp-list" element={<ServicesAppList />} />
             <Route path="/manage-serviceapp" element={<ManageServicesApp />} />
+            <Route path="/serviceapp" element={<ServiceApp />} />
           </Route>
         </Routes>
       </Layout>

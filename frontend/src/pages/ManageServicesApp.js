@@ -1,143 +1,756 @@
 import React, { useState, useEffect } from "react";
-import utmlogo from "../assets/utm-logo.svg";
 import { connect } from "react-redux";
-import { getEquipment } from "../actions/equipment";
-import { updateServiceApp } from "../actions/servicesapp";
+import {
+  updateServiceApp,
+  getServiceApp,
+  getAnalysisReport,
+} from "../actions/servicesapp";
+import { getUsers } from "../actions/auth";
+import {
+  getAllEquipment,
+  getEquipment,
+  updateEquipment,
+} from "../actions/equipment";
 import { useLocation } from "react-router-dom";
-import { Table, Badge } from "react-bootstrap";
+import { Badge, Button, Card, Modal, Form, InputGroup } from "react-bootstrap";
 
 const ManageServicesApp = ({
   updateServiceApp,
+  getServiceApp,
+  getUsers,
+  updateEquipment,
   getEquipment,
+  getAllEquipment,
   user,
+  users,
   equipment,
+  serviceApp,
 }) => {
   const location = useLocation();
-  const serviceApp = location.state?.serviceApp;
+  const prevServiceApp = location.state?.serviceApp;
 
-  const [appType, setAppType] = useState(serviceApp.appType);
-  const [name, setName] = useState(serviceApp.name);
-  const [svName, setSvName] = useState(serviceApp.svName);
-  const [phoneNumber, setPhoneNumber] = useState(serviceApp.phone_number);
-  const [status, setStatus] = useState(serviceApp.status);
-  const [isApproved, setIsApproved] = useState(serviceApp.isApproved);
+  const [customer, setCustomer] = useState({});
+  const [status, setStatus] = useState("");
+  const [isApproved, setIsApproved] = useState("");
+  const [charges, setCharges] = useState("");
+  const [remarks, setRemarks] = useState("");
+  const [analysisReport, setAnalysisReport] = useState(null);
+  const [equipmentId, setEquipmentId] = useState(null);
+  const [equipmentName, setEquipmentName] = useState(null);
+  const [equipmentLocation, setEquipmentLocation] = useState(null);
+  const [equipmentAvailability, setAvailability] = useState(null);
+  const [staff, setStaff] = useState({});
 
-  const [qty, setQty] = useState("");
-  const [sampleType, setSampleType] = useState("");
-  const [rentDate, setRentDate] = useState("");
-  const [duration, setDuration] = useState("0");
+  // const [updateSuccess, setUpdateSuccess] = useState("");
 
-  const [updateSuccess, setUpdateSuccess] = useState("");
+  const handleFileSelect = (e) => {
+    const file = e.target.files[0];
+
+    setAnalysisReport(file);
+
+    console.log("Selected file:", file);
+  };
+
+  const handleDownload = async (fileURL) => {
+    try {
+      const blobData = await getAnalysisReport(fileURL);
+      const downloadLink = document.createElement("a");
+      downloadLink.href = window.URL.createObjectURL(blobData);
+      downloadLink.download = "analysis_report.pdf"; // Specify the desired file name
+      downloadLink.click();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const getData = async () => {
+    const serviceAppData = await getServiceApp(prevServiceApp.appId);
+    const usersData = await getUsers();
+
+    if (serviceAppData.equipmentId !== null) {
+      const equipmentData = await getEquipment(serviceAppData.equipmentId);
+      setEquipmentId(equipmentData.equipmentId);
+      setEquipmentName(equipmentData.name);
+      setEquipmentLocation(equipmentData.location);
+      setAvailability(equipmentData.availability);
+    } else await getAllEquipment();
+
+    setCustomer(
+      usersData.filter((user) => {
+        return user.id === serviceAppData.userId;
+      })[0]
+    );
+    setAnalysisReport(serviceAppData.analysisReport);
+    setStatus(serviceAppData.status);
+    setIsApproved(serviceAppData.isApproved);
+    setCharges(serviceAppData.charges || "");
+    setRemarks(serviceAppData.remarks || "N/A");
+    setStaff(
+      usersData.filter((user) => {
+        return user.id === serviceAppData.staffInCharged;
+      })[0] || "N/A"
+    );
+    console.log(customer, staff, analysisReport, equipment, serviceAppData);
+  };
 
   useEffect(() => {
-    console.log();
+    getData();
   }, []);
-  console.log(isApproved)
-  
-  const renderBadge = (isApproved,status) => {
+
+  const [isEdit, setIsEdit] = useState(false);
+  const [showRejectConfirmation, setShowRejectConfirmation] = useState(false);
+  const [showApproveConfirmation, setShowApproveConfirmation] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const onUpdateReport = async (e) => {
+    e.preventDefault();
+
+    const updatedServiceApp = new FormData();
+    updatedServiceApp.append("appType", serviceApp.appType);
+    updatedServiceApp.append("name", serviceApp.name);
+    updatedServiceApp.append("phone_number", serviceApp.phone_number);
+    updatedServiceApp.append("status", serviceApp.status);
+    updatedServiceApp.append("isApproved", serviceApp.isApproved);
+    updatedServiceApp.append("title", serviceApp.title);
+    updatedServiceApp.append("sampleNum", serviceApp.sampleNum);
+    updatedServiceApp.append("sampleType", serviceApp.sampleType);
+    updatedServiceApp.append("useDate", serviceApp.useDate);
+    updatedServiceApp.append("userId", serviceApp.userId);
+    updatedServiceApp.append("analysisReport", analysisReport);
+
+    console.log(updatedServiceApp);
+
+    await updateServiceApp(updatedServiceApp, serviceApp.appId);
+  };
+
+  const onUpdateStatus = async (e, updatedStatus, updatedIsApproved) => {
+    e.preventDefault();
+
+    const updatedServiceApp = new FormData();
+    updatedServiceApp.append("appType", serviceApp.appType);
+    updatedServiceApp.append("name", serviceApp.name);
+    updatedServiceApp.append("phone_number", serviceApp.phone_number);
+    updatedServiceApp.append("status", updatedStatus);
+    updatedServiceApp.append("isApproved", updatedIsApproved);
+    updatedServiceApp.append("title", serviceApp.title);
+    updatedServiceApp.append("sampleNum", serviceApp.sampleNum);
+    updatedServiceApp.append("sampleType", serviceApp.sampleType);
+    updatedServiceApp.append("charges", charges);
+    updatedServiceApp.append("remarks", remarks);
+    updatedServiceApp.append("useDate", serviceApp.useDate);
+    updatedServiceApp.append("userId", serviceApp.userId);
+    if (user.role === "D") {
+      updatedServiceApp.append("staffInCharged", staff.id);
+    }
+
+    console.log(updatedServiceApp);
+
+    await updateServiceApp(updatedServiceApp, serviceApp.appId);
+  };
+
+  const onUpdateEquipment = async (e) => {
+    e.preventDefault();
+
+    const updatedEquipment = {
+      regNum: equipment.regNum,
+      name: equipment.name,
+      quantity: equipment.qty,
+      location: equipmentLocation,
+      registered: equipment.registered,
+      price: equipment.price,
+      status: equipment.status,
+      availability: equipmentAvailability,
+      hasService: equipment.hasService,
+    };
+
+    await updateEquipment(updatedEquipment, equipment.equipmentId);
+
+    const updatedServiceApp = new FormData();
+    updatedServiceApp.append("appType", serviceApp.appType);
+    updatedServiceApp.append("name", serviceApp.name);
+    updatedServiceApp.append("phone_number", serviceApp.phone_number);
+    updatedServiceApp.append("status", serviceApp.status);
+    updatedServiceApp.append("isApproved", serviceApp.isApproved);
+    updatedServiceApp.append("title", serviceApp.title);
+    updatedServiceApp.append("sampleNum", serviceApp.sampleNum);
+    updatedServiceApp.append("sampleType", serviceApp.sampleType);
+    updatedServiceApp.append("useDate", serviceApp.useDate);
+    updatedServiceApp.append("userId", serviceApp.userId);
+    updatedServiceApp.append("equipmentId", equipmentId);
+    updatedServiceApp.append("equipmentName", equipmentName);
+
+    console.log(updatedServiceApp);
+
+    await updateServiceApp(updatedServiceApp, serviceApp.appId);
+  };
+
+  const renderBadge = (isApproved, status) => {
     switch (isApproved) {
       case 0:
-        return <Badge bg="warning" text="dark">{status}</Badge>;
+        return (
+          <Badge bg="warning" text="dark">
+            {status}
+          </Badge>
+        );
       case 1:
-        return <Badge bg="danger" text="light">{status}</Badge>;
+        return (
+          <Badge bg="danger" text="light">
+            {status}
+          </Badge>
+        );
       case 2:
-        return <Badge bg="success" text="light">{status}</Badge>;
+        return (
+          <Badge bg="success" text="light">
+            {status}
+          </Badge>
+        );
       default:
         return null;
     }
   };
 
-  useEffect(() => {
-    if (appType === "Rental") {
-      getEquipment(serviceApp.equipmentId);
-      setDuration(serviceApp?.duration);
-      setRentDate(serviceApp.rentDate);
-    } else if (appType === "Sample") {
-      setQty(serviceApp.quantity);
-      setSampleType(serviceApp.type);
+  const renderStudent = (isStudent) => {
+    if (isStudent) {
+      return (
+        <Badge bg="secondary" text="light">
+          UTM Student
+        </Badge>
+      );
+    } else {
+      return (
+        <Badge bg="secondary" text="light">
+          Outsiders
+        </Badge>
+      );
     }
-  }, [serviceApp, appType]);
-
+  };
   return (
     <main className="main-content">
-      <div className="utm-logo-start">
-        <img src={utmlogo} alt="logo" />
-      </div>
       <div className="header-img">
         <h1>Service Application</h1>
       </div>
-
       <div className="content-status">
-        <div className="content-header mb-3">
-          <h3>
-            {/* <Badge bg="warning" text="dark">
-              Warning
-            </Badge> */}
-            {renderBadge(isApproved,status)}
-          </h3>
+        <div className="d-flex justify-content-between mb-3">
+          <div className="d-flex">
+            <h3 className="fw-bold">Service Type</h3>
+            <h3 className="text-success fw-bold fst-italic ms-3">
+              {serviceApp.appType}
+            </h3>
+          </div>
+          <div className="d-flex">
+            <h3 className="me-2">{renderStudent(customer?.isStudent)}</h3>
+            <h3>{renderBadge(isApproved, status)}</h3>
+          </div>
         </div>
-        <Table striped borderless hover className="app-status">
-          <tbody>
-            <tr>
-              <td>Application Type</td>
-              <td>:</td>
-              <td>{appType}</td>
-            </tr>
-            <tr>
-              <td>Name</td>
-              <td>:</td>
-              <td>{name}</td>
-            </tr>
-            <tr>
-              <td>Phone Number</td>
-              <td>:</td>
-              <td>{phoneNumber}</td>
-            </tr>
-            <tr>
-              <td>Supervisor</td>
-              <td>:</td>
-              <td>{svName}</td>
-            </tr>
-            <tr>
-              <td>Status</td>
-              <td>:</td>
-              <td>{status}</td>
-            </tr>
-            {appType === "Rental" && (
-              <>
-                <tr>
-                  <td>Equipment</td>
-                  <td>:</td>
-                  <td>{equipment.name}</td>
-                </tr>
-                <tr>
-                  <td>Rental Date</td>
-                  <td>:</td>
-                  <td>{new Date(rentDate).toLocaleDateString()}</td>
-                </tr>
-                <tr>
-                  <td>Duration (in days)</td>
-                  <td>:</td>
-                  <td>{parseInt(duration.split(" ")[0])}</td>
-                </tr>
-              </>
+        <div className="d-flex">
+          <div className="d-flex flex-column me-4 w-50">
+            <Card border="secondary">
+              <Card.Header className="fw-bold fs-4">
+                Application Details
+              </Card.Header>
+              <Card.Body className="d-flex flex-column">
+                <div className="d-flex justify-content-between">
+                  <Card.Title>Title</Card.Title>
+                  <Card.Title>{serviceApp.title}</Card.Title>
+                </div>
+                <hr />
+                <div className="d-flex justify-content-between">
+                  <Card.Title>Type of Project</Card.Title>
+                  <Card.Title>{serviceApp.projectType}</Card.Title>
+                </div>
+                <hr />
+                <div className="d-flex justify-content-between">
+                  <Card.Title>Type of Sample</Card.Title>
+                  <Card.Title>{serviceApp.sampleType}</Card.Title>
+                </div>
+                <hr />
+                <div className="d-flex justify-content-between">
+                  <Card.Title>Number of Sample</Card.Title>
+                  <Card.Title>{serviceApp.sampleNum}</Card.Title>
+                </div>
+                <hr />
+                <div className="d-flex justify-content-between">
+                  <Card.Title>Date of Use</Card.Title>
+                  <Card.Title>
+                    {new Date(serviceApp.useDate).toLocaleDateString()}
+                  </Card.Title>
+                </div>
+                {serviceApp.appType === "Laser Rental" && (
+                  <>
+                    <hr />
+                    <div className="d-flex justify-content-between">
+                      <Card.Title>Duration of Use</Card.Title>
+                      <Card.Title>
+                        {parseInt(serviceApp.duration?.split(" ")[0])} Days
+                      </Card.Title>
+                    </div>
+                  </>
+                )}
+              </Card.Body>
+            </Card>
+
+            {(serviceApp.equipmentId !== null || user.role === "LS") && (
+              <Card border="secondary" className="mt-4">
+                <Card.Header className="fw-bold fs-4 d-flex justify-content-between">
+                  <p>Equipment Details</p>
+                  <Button variant="dark" onClick={() => setIsEdit(true)}>
+                    Edit
+                  </Button>
+                </Card.Header>
+                <Card.Body className="d-flex flex-column">
+                  <div className="d-flex justify-content-between">
+                    <Card.Title>Name</Card.Title>
+                    <Card.Title>{equipment?.name || "N/A"}</Card.Title>
+                  </div>
+                  <hr />
+                  <div className="d-flex justify-content-between">
+                    <Card.Title>Location</Card.Title>
+                    <Card.Title>{equipmentLocation || "N/A"}</Card.Title>
+                  </div>
+                  <hr />
+                  <div className="d-flex justify-content-between">
+                    <Card.Title>Status</Card.Title>
+                    <Card.Title>{equipment?.status || "N/A"}</Card.Title>
+                  </div>
+                </Card.Body>
+              </Card>
             )}
-            {appType === "Sample" && (
-              <>
-                <tr>
-                  <td>Quantity</td>
-                  <td>:</td>
-                  <td>{qty}</td>
-                </tr>
-                <tr>
-                  <td>Sample Type</td>
-                  <td>:</td>
-                  <td>{sampleType}</td>
-                </tr>
-              </>
+            {(user.role === "LS" || analysisReport !== null) && (
+              <Card border="secondary" className="mt-4">
+                <Card.Header className="fw-bold fs-4 d-flex justify-content-between">
+                  <p>Analysis Report</p>
+                  <div>
+                    {user.role === "LS" && (
+                      <Button
+                        variant="dark"
+                        className="me-2"
+                        onClick={(e) => onUpdateReport(e)}
+                      >
+                        Upload
+                      </Button>
+                    )}
+                    {analysisReport !== null && (
+                      <Button
+                        variant="outline-dark"
+                        onClick={() => handleDownload(analysisReport)}
+                      >
+                        Download
+                      </Button>
+                    )}
+                  </div>
+                </Card.Header>
+                <Card.Body className="d-flex flex-column">
+                  <div className="d-flex justify-content-between">
+                    {analysisReport === null && (
+                      <Card.Title>No File Yet</Card.Title>
+                    )}
+                    {analysisReport !== null && (
+                      <Card.Title>
+                        {analysisReport.substring(
+                          analysisReport.indexOf(".com/") + 5
+                        )}
+                      </Card.Title>
+                    )}
+                    {user.role === "LS" && (
+                      <input type="file" onChange={handleFileSelect} />
+                    )}
+                  </div>
+                </Card.Body>
+              </Card>
             )}
-          </tbody>
-        </Table>
+          </div>
+          <div className="d-flex flex-column w-50">
+            <Card border="secondary">
+              <Card.Header className="fw-bold fs-4">
+                Customer Details
+              </Card.Header>
+              <Card.Body className="d-flex flex-column">
+                <div className="d-flex justify-content-between">
+                  <Card.Title>Name</Card.Title>
+                  <Card.Title>{customer?.name}</Card.Title>
+                </div>
+                <hr />
+                <div className="d-flex justify-content-between">
+                  <Card.Title>Phone Number</Card.Title>
+                  <Card.Title>{customer?.phone_number}</Card.Title>
+                </div>
+                {customer?.isStudent && (
+                  <>
+                    <hr />
+                    <div className="d-flex justify-content-between">
+                      <Card.Title>Matrix Number</Card.Title>
+                      <Card.Title>{customer?.matrixNum}</Card.Title>
+                    </div>
+                    <hr />
+                    <div className="d-flex justify-content-between">
+                      <Card.Title>Name of Supervisor</Card.Title>
+                      <Card.Title>{serviceApp.svName}</Card.Title>
+                    </div>
+                  </>
+                )}
+              </Card.Body>
+            </Card>
+            <Card border="secondary" className="mt-4">
+              <Card.Header className="fw-bold fs-4">
+                Application Summary
+              </Card.Header>
+              <Card.Body className="d-flex flex-column">
+                <div className="d-flex justify-content-between">
+                  <Card.Title>Created on</Card.Title>
+                  <Card.Title>
+                    {new Date(serviceApp.created).toLocaleDateString()}
+                  </Card.Title>
+                </div>
+                <hr />
+                <div className="d-flex justify-content-between">
+                  <Card.Title>Created time</Card.Title>
+                  <Card.Title>
+                    {new Date(serviceApp.created).toLocaleTimeString()}
+                  </Card.Title>
+                </div>
+                {isApproved === 2 && (
+                  <>
+                    <hr />
+                    <div className="d-flex justify-content-between">
+                      <Card.Title>Lab Staff in charged</Card.Title>
+                      <Card.Title>{staff.name}</Card.Title>
+                    </div>
+
+                    <hr />
+                    <div className="d-flex justify-content-between">
+                      <Card.Title>Charges</Card.Title>
+                      <Card.Title>RM {charges}</Card.Title>
+                    </div>
+                  </>
+                )}
+              </Card.Body>
+            </Card>
+            {isApproved !== 0 && (
+              <Card border="secondary" className="mt-4">
+                <Card.Header className="fw-bold fs-4">Remarks</Card.Header>
+                <Card.Body className="d-flex flex-column">
+                  <Card.Title>{remarks}</Card.Title>
+                </Card.Body>
+              </Card>
+            )}
+            {isApproved === 0 && (
+              <div className="d-flex flex-column mt-auto">
+                {user.role === "RO" && status === "Pending" && (
+                  <>
+                    <Button
+                      variant="dark"
+                      className="my-1"
+                      onClick={(e) => {
+                        setIsLoading(true);
+                        setTimeout(() => {
+                          setStatus("Waiting for Approval");
+                          onUpdateStatus(e, "Waiting for Approval", 0);
+                          setIsLoading(false);
+                        }, 2000);
+                      }}
+                      disabled={isLoading}
+                    >
+                      {isLoading ? "Loading..." : "Request for Approval"}
+                    </Button>
+                    <Button
+                      variant="outline-dark"
+                      onClick={() => setShowRejectConfirmation(true)}
+                    >
+                      Reject
+                    </Button>
+                  </>
+                )}
+                {user.role === "D" && status === "Waiting for Approval" && (
+                  <>
+                    <Button
+                      variant="dark"
+                      className="my-1"
+                      onClick={() => setShowApproveConfirmation(true)}
+                    >
+                      Approve
+                    </Button>
+                    <Button
+                      variant="outline-dark"
+                      onClick={() => setShowRejectConfirmation(true)}
+                    >
+                      Reject
+                    </Button>
+                  </>
+                )}
+              </div>
+            )}
+            {user.role === "LS" && isApproved === 2 && (
+              <div className="d-flex flex-column mt-auto">
+                {status === "Approved" && (
+                  <Button
+                    variant="dark"
+                    className="my-1"
+                    onClick={(e) => {
+                      setIsLoading(true);
+                      setTimeout(() => {
+                        setStatus("In Progress");
+                        onUpdateStatus(e, "In Progress", 2);
+                        setIsLoading(false);
+                      }, 2000);
+                    }}
+                    disabled={isLoading}
+                  >
+                    {isLoading ? "Loading..." : "Update status to In Progress"}
+                  </Button>
+                )}
+                {status === "In Progress" && (
+                  <Button
+                    variant="dark"
+                    className="my-1"
+                    onClick={(e) => {
+                      setIsLoading(true);
+                      setTimeout(() => {
+                        setStatus("Completed");
+                        onUpdateStatus(e, "Completed", 2);
+                        setIsLoading(false);
+                      }, 2000);
+                    }}
+                    disabled={isLoading}
+                  >
+                    {isLoading ? "Loading..." : "Update status to Completed"}
+                  </Button>
+                )}
+              </div>
+            )}
+            <Modal
+              show={showRejectConfirmation}
+              onHide={() => setShowRejectConfirmation(false)}
+            >
+              <Modal.Header>
+                <Modal.Title>
+                  Are you sure you want to reject this service application?
+                </Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <Form>
+                  <Form.Group
+                    className="mb-3"
+                    controlId="exampleForm.ControlTextarea1"
+                  >
+                    <Form.Label>Remarks</Form.Label>
+                    <Form.Control
+                      as="textarea"
+                      rows={3}
+                      value={remarks}
+                      onChange={(e) => setRemarks(e.target.value)}
+                    />
+                    <Form.Text>Optional</Form.Text>
+                  </Form.Group>
+                </Form>
+              </Modal.Body>
+              <Modal.Footer>
+                <Button
+                  variant="outline-secondary"
+                  onClick={() => setShowRejectConfirmation(false)}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  variant="outline-danger"
+                  onClick={(e) => {
+                    setIsLoading(true);
+                    setTimeout(() => {
+                      setStatus("Rejected");
+                      setIsApproved(1);
+                      onUpdateStatus(e, "Rejected", 1);
+                      setShowRejectConfirmation(false);
+                      setIsLoading(false);
+                    }, 2000);
+                  }}
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Loading..." : "Reject"}
+                </Button>
+              </Modal.Footer>
+            </Modal>
+            <Modal
+              show={showApproveConfirmation}
+              onHide={() => setShowApproveConfirmation(false)}
+            >
+              <Modal.Header>
+                <Modal.Title>
+                  Please assign lab staff and charges for this service
+                  application.
+                </Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <Form>
+                  <Form.Group className="mb-3">
+                    <Form.Label>Lab Staff</Form.Label>
+                    <Form.Select
+                      required
+                      value={staff ? staff.id : ""}
+                      onChange={(e) => {
+                        const selectedOption = users.find(
+                          (staff) => staff.id === parseInt(e.target.value)
+                        );
+                        setStaff(selectedOption || null);
+                      }}
+                    >
+                      <option value="">Choose</option>
+                      {users.map((staff) => {
+                        if (staff.role === "LS") {
+                          return (
+                            <option key={staff.id} value={staff.id}>
+                              {staff.name}
+                            </option>
+                          );
+                        }
+                        return null;
+                      })}
+                    </Form.Select>
+                  </Form.Group>
+                  <Form.Group className="mb-3">
+                    <Form.Label>Charges</Form.Label>
+                    <InputGroup>
+                      <InputGroup.Text>RM</InputGroup.Text>
+                      <Form.Control
+                        required
+                        type="number"
+                        value={charges}
+                        onChange={(e) => setCharges(e.target.value)}
+                      />
+                    </InputGroup>
+                  </Form.Group>
+                  <Form.Group
+                    className="mb-3"
+                    controlId="exampleForm.ControlTextarea1"
+                  >
+                    <Form.Label>Remarks</Form.Label>
+                    <Form.Control
+                      as="textarea"
+                      rows={3}
+                      value={remarks}
+                      onChange={(e) => setRemarks(e.target.value)}
+                    />
+                    <Form.Text>Optional</Form.Text>
+                  </Form.Group>
+                </Form>
+              </Modal.Body>
+              <Modal.Footer>
+                <Button
+                  variant="outline-secondary"
+                  onClick={() => setShowApproveConfirmation(false)}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  variant="outline-success"
+                  onClick={(e) => {
+                    setIsLoading(true);
+                    setTimeout(() => {
+                      setStatus("Approved");
+                      setIsApproved(2);
+                      onUpdateStatus(e, "Approved", 2);
+                      setShowApproveConfirmation(false);
+                      setIsLoading(false);
+                    }, 2000);
+                  }}
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Loading..." : "Approve"}
+                </Button>
+              </Modal.Footer>
+            </Modal>
+            <Modal show={isEdit} onHide={() => setIsEdit(false)}>
+              <Modal.Header>
+                {serviceApp.equipmentId === null ? (
+                  <Modal.Title>Choose your equipment.</Modal.Title>
+                ) : (
+                  <Modal.Title>Update the equipment status</Modal.Title>
+                )}
+              </Modal.Header>
+              <Modal.Body>
+                <Form>
+                  {serviceApp.equipmentId === null && (
+                    <Form.Group className="mb-3">
+                      <Form.Label>Equipment</Form.Label>
+                      <Form.Select
+                        required
+                        value={equipmentId}
+                        onChange={(e) => {
+                          const selectedOption = equipment?.find(
+                            (item) =>
+                              item.equipmentId === parseInt(e.target.value)
+                          );
+                          setEquipmentId(selectedOption?.equipmentId);
+                          setEquipmentName(selectedOption?.name);
+                        }}
+                      >
+                        <option value="">Choose</option>
+                        {Array.isArray(equipment) &&
+                          equipment.map((item) => {
+                            if (item.hasService && item.availability) {
+                              return (
+                                <option
+                                  key={item.equipmentId}
+                                  value={item.equipmentId}
+                                >
+                                  {item.name}
+                                </option>
+                              );
+                            }
+                            return null;
+                          })}
+                      </Form.Select>
+                    </Form.Group>
+                  )}
+                  {serviceApp.equipmentId !== null && (
+                    <>
+                      <Form.Group className="mb-3">
+                        <Form.Label>Location</Form.Label>
+                        <Form.Control
+                          type="text"
+                          value={equipmentLocation}
+                          onChange={(e) => setEquipmentLocation(e.target.value)}
+                        />
+                      </Form.Group>
+                      <Form.Group className="mb-3">
+                        <Form.Label>Availability</Form.Label>
+                        <Form.Select
+                          value={equipmentAvailability?.toString()}
+                          onChange={(e) =>
+                            setAvailability(e.target.value === "true")
+                          }
+                        >
+                          <option value="true">Available</option>
+                          <option value="false">Not available</option>
+                        </Form.Select>
+                      </Form.Group>
+                    </>
+                  )}
+                </Form>
+              </Modal.Body>
+              <Modal.Footer>
+                <Button
+                  variant="outline-secondary"
+                  onClick={() => setIsEdit(false)}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  variant="outline-success"
+                  onClick={(e) => {
+                    setIsLoading(true);
+                    setTimeout(() => {
+                      onUpdateEquipment(e);
+                      setIsEdit(false);
+                      setIsLoading(false);
+                    }, 2000);
+                  }}
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Loading..." : "Update"}
+                </Button>
+              </Modal.Footer>
+            </Modal>
+          </div>
+        </div>
       </div>
     </main>
   );
@@ -145,9 +758,16 @@ const ManageServicesApp = ({
 
 const mapStateToProps = (state) => ({
   user: state.auth.user,
+  users: state.auth.users,
   equipment: state.equipment,
+  serviceApp: state.servicesApp,
 });
 
-export default connect(mapStateToProps, { getEquipment, updateServiceApp })(
-  ManageServicesApp
-);
+export default connect(mapStateToProps, {
+  updateServiceApp,
+  getServiceApp,
+  getUsers,
+  getEquipment,
+  getAllEquipment,
+  updateEquipment,
+})(ManageServicesApp);

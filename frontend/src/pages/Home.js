@@ -9,9 +9,6 @@ const Home = ({ user }) => {
   
   return (
     <div className="main-content">
-      <div className="utm-logo-start">
-        <img src={utmlogo} alt="logo" />
-      </div>
       <div className="header">
         <h1>Home</h1>
       </div>

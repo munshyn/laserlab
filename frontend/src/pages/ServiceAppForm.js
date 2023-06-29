@@ -22,8 +22,10 @@ const ServiceAppForm = ({
   const [appType, setAppType] = useState("");
   const [name, setName] = useState(user.name);
   const [svName, setSvName] = useState("");
+  const [title, setTitle] = useState("");
+  const [projectType, setProjectType] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [qty, setQty] = useState("");
+  const [sampleNum, setSampleNum] = useState("");
   const [sampleType, setSampleType] = useState("");
 
   const [addSuccess, setAddSuccess] = useState("");
@@ -31,26 +33,36 @@ const ServiceAppForm = ({
   const [fetchEquipment, setFetchEquipment] = useState(false);
   const [equipmentId, setEquipmentId] = useState("");
   const [equipmentName, setEquipmentName] = useState("");
-  const [rentDate, setRentDate] = useState(null);
-  const [returnDate, setReturnDate] = useState(null);
+  const [useDate, setUseDate] = useState(null);
   const [duration, setDuration] = useState(0);
 
-  const handleRentDateChange = (date) => {
-    setRentDate(date);
-  };
+  const projectTypes = [
+    "Undergraduate",
+    "Master (Mixed Mode)",
+    "Master (Research)",
+    "P.h.D",
+    "Consultancy",
+  ];
 
-  const handleReturnDateChange = (date) => {
-    setReturnDate(date);
+  const services = [
+    "Laser Rental",
+    "Laser Repairing",
+    "Elemental Analysis by LIBS",
+    "Fiber Coupler",
+    "Fourier Transform Infrared Spectroscopy (FTIR)",
+    "Thin Film Deposition",
+  ];
+
+  const durations = ["1", "2", "3", "4", "5", "6", "7"];
+
+  const handleUseDateChange = (date) => {
+    setUseDate(date);
   };
 
   const today = new Date();
 
-  const rentDateFilter = (date) => {
+  const useDateFilter = (date) => {
     return date >= today;
-  };
-
-  const returnDateFilter = (date) => {
-    return date >= rentDate;
   };
 
   useEffect(() => {
@@ -59,25 +71,15 @@ const ServiceAppForm = ({
     appType,
     svName,
     duration,
-    rentDate,
+    useDate,
     equipmentId,
     equipmentName,
-    qty,
+    sampleNum,
     sampleType,
   ]);
 
   useEffect(() => {
-    if (rentDate && returnDate) {
-      const calculatedDuration = differenceInDays(returnDate, rentDate);
-      const validDuration = calculatedDuration >= 0 ? calculatedDuration : 0;
-      setDuration(validDuration);
-    } else {
-      setDuration(0);
-    }
-  }, [rentDate, returnDate]);
-
-  useEffect(() => {
-    if (appType === "Rental" && !fetchEquipment) {
+    if (appType === "Laser Rental" && !fetchEquipment) {
       getAllEquipment();
       console.log(equipments);
       setFetchEquipment(true);
@@ -90,21 +92,27 @@ const ServiceAppForm = ({
       const arr = user.phone_number.split(" ", 2);
       setPhoneNumber(arr[1]);
     }
-    console.log(user.phone_number);
+    console.log(user);
   }, [user]);
 
   const onSubmit = async (e) => {
     e.preventDefault();
 
-    let serviceApp = null;
+    let serviceApp = "";
     let phone_number = `+60 ${phoneNumber}`;
+    
+    if(appType === "Laser Rental"){
+      setDuration(`P${duration}D`)
 
-    if (appType === "Rental") {
-      const rentApp = {
+      const rentalApp = {
         appType: appType,
         svName: svName,
-        duration: `P${duration}D`,
-        rentDate: rentDate,
+        title: title,
+        projectType: projectType,
+        sampleNum: sampleNum,
+        sampleType: sampleType,
+        duration: duration,
+        useDate: useDate,
         status: "Pending",
         isApproved: 0,
         name: name,
@@ -112,39 +120,46 @@ const ServiceAppForm = ({
         userId: user.id,
         equipmentId: equipmentId,
         equipmentName: equipmentName,
-      };
+      }
 
-      serviceApp = rentApp;
-    } else if (appType === "Sample") {
-      const sampleApp = {
+      serviceApp = rentalApp;
+      
+    }else{
+      const generalApp = {
         appType: appType,
         svName: svName,
-        quantity: qty,
-        type: sampleType,
+        title: title,
+        projectType: projectType,
+        sampleNum: sampleNum,
+        sampleType: sampleType,
+        useDate: useDate,
         status: "Pending",
         isApproved: 0,
         name: name,
         phone_number: phone_number,
         userId: user.id,
-      };
-
-      serviceApp = sampleApp;
+      }
+      
+      serviceApp = generalApp;
     }
 
+    console.log(serviceApp)
+
     const data = await applyService(serviceApp);
-    
+
     if (data == "SUCCESS") {
       setAddSuccess(true);
       setTimeout(() => {
         setAppType("");
         setSvName("");
         setDuration(0);
-        setRentDate("");
-        setReturnDate("");
+        setUseDate("");
+        setTitle("");
+        setProjectType("");
         setSampleType("");
         setEquipmentId("");
         setEquipmentName("");
-        setQty("");
+        setSampleNum("");
       }, 3000);
     } else setAddSuccess(false);
   };
@@ -168,9 +183,6 @@ const ServiceAppForm = ({
 
   return (
     <main className="main-content">
-      <div className="utm-logo-start">
-        <img src={utmlogo} alt="logo" />
-      </div>
       <div className="header-img">
         <h1>Apply for service</h1>
       </div>
@@ -178,32 +190,45 @@ const ServiceAppForm = ({
         {popup_box()}
         <Form onSubmit={(e) => onSubmit(e)} autoComplete="off">
           <div className="service-form">
-            <div className="left-form">
-              <Form.Group className="mb-3" controlId="formBasicName">
-                <Form.Label>Full Name</Form.Label>
+            <Form.Group className="mb-3" controlId="formBasicServiceType">
+              <Form.Label>Service Application Type: </Form.Label>
+              <Form.Select
+                required
+                value={appType}
+                onChange={(e) => setAppType(e.target.value)}
+              >
+                <option value="">Choose</option>
+                {services.map((appType, index) => (
+                  <option key={index} value={appType}>
+                    {appType}
+                  </option>
+                ))}
+              </Form.Select>
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formBasicName">
+              <Form.Label>Full Name</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter your full name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formBasicPhoneNumber">
+              <Form.Label>Contact No.</Form.Label>
+              <InputGroup>
+                <InputGroup.Text>+60</InputGroup.Text>
                 <Form.Control
+                  required
                   type="text"
-                  placeholder="Enter your full name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Enter your phone number"
+                  value={phoneNumber}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
                 />
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="formBasicPhoneNumber">
-                <Form.Label>Contact No.</Form.Label>
-                <InputGroup>
-                  <InputGroup.Text>+60</InputGroup.Text>
-                  <Form.Control
-                    required
-                    type="text"
-                    placeholder="Enter your phone number"
-                    value={phoneNumber}
-                    onChange={(e) => setPhoneNumber(e.target.value)}
-                  />
-                </InputGroup>
-                <Form.Text className="text-muted">
-                  Eg. +60 12 345 6789
-                </Form.Text>
-              </Form.Group>
+              </InputGroup>
+              <Form.Text className="text-muted">Eg. +60 12 345 6789</Form.Text>
+            </Form.Group>
+            {user.isStudent && (
               <Form.Group className="mb-3" controlId="formBasicSvName">
                 <Form.Label>Supervisor Name</Form.Label>
                 <Form.Control
@@ -215,33 +240,84 @@ const ServiceAppForm = ({
                 />
                 <Form.Text className="text-muted">Eg. Dr Shahliza</Form.Text>
               </Form.Group>
-            </div>
-            <div className="right-form">
-              <Form.Group className="mb-3" controlId="formBasicServiceType">
-                <Form.Label>Service Application Type: </Form.Label>
-                <div className="d-flex flex-row mt-1">
-                  <Form.Check
-                    className="mx-2"
-                    type="radio"
-                    name="appType"
-                    label="Rental"
-                    value="Rental"
-                    checked={appType === "Rental"}
-                    onChange={(e) => setAppType(e.target.value)}
-                  />
-                  <Form.Check
-                    type="radio"
-                    name="appType"
-                    label="Sample"
-                    value="Sample"
-                    checked={appType === "Sample"}
-                    onChange={(e) => setAppType(e.target.value)}
-                  />
-                </div>
+            )}
+            <Form.Group className="mb-3" controlId="formBasicTitle">
+              <Form.Label>Title</Form.Label>
+              <Form.Control
+              required
+                type="text"
+                placeholder="Enter project title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
+            </Form.Group>
+            <Row>
+              <Form.Group as={Col} className="mb-3" controlId="formBasicTitle">
+                <Form.Label>Type of Project</Form.Label>
+                <Form.Select
+                  required
+                  value={projectType}
+                  onChange={(e) => setProjectType(e.target.value)}
+                >
+                  <option value="">Choose</option>
+                  {projectTypes.map((projectType, index) => (
+                    <option key={index} value={projectType}>
+                      {projectType}
+                    </option>
+                  ))}
+                </Form.Select>
               </Form.Group>
-              {appType === "Rental" && (
-                <>
-                  <Form.Group className="mb-3" controlId="formBasicEquipment">
+              <Form.Group
+                as={Col}
+                className="mb-3"
+                controlId="formBasicUseDate"
+              >
+                <Form.Label>Date of Use</Form.Label>
+                <DatePicker
+                  required
+                  id="useDate"
+                  selected={useDate}
+                  onChange={handleUseDateChange}
+                  dateFormat="yyyy-MM-dd"
+                  className="form-control"
+                  filterDate={useDateFilter}
+                  minDate={today}
+                />
+              </Form.Group>
+            </Row>
+            <Row>
+              <Col xs={8}>
+                <Form.Group className="mb-3" controlId="formBasicSampleType">
+                  <Form.Label>Type of Samples</Form.Label>
+                  <Form.Control
+                    required
+                    type="text"
+                    placeholder="Type"
+                    value={sampleType}
+                    onChange={(e) => setSampleType(e.target.value)}
+                  />
+                </Form.Group>
+              </Col>
+              <Form.Group as={Col} className="mb-3" controlId="formBasicQty">
+                <Form.Label>Number of Samples</Form.Label>
+                <Form.Control
+                  required
+                  type="number"
+                  placeholder="Quantity"
+                  value={sampleNum}
+                  onChange={(e) => setSampleNum(e.target.value)}
+                />
+              </Form.Group>
+            </Row>
+
+            {appType === "Laser Rental" && (
+              <>
+                <Row>
+                  <Form.Group
+                    as={Col}
+                    className="mb-3"
+                    controlId="formBasicEquipment"
+                  >
                     <Form.Label>Equipment</Form.Label>
                     <Form.Select
                       required
@@ -257,7 +333,7 @@ const ServiceAppForm = ({
                     >
                       <option value="">Choose</option>
                       {equipments?.map((item, index) => {
-                        if (item.hasService) {
+                        if (item.hasService && item.availability) {
                           return (
                             <option
                               key={item.equipmentId}
@@ -272,96 +348,35 @@ const ServiceAppForm = ({
                     </Form.Select>
                   </Form.Group>
 
-                  <Row>
-                    <Form.Group
-                      as={Col}
-                      className="mb-3"
-                      controlId="formBasicRentDate"
-                    >
-                      <Form.Label>Rent Date</Form.Label>
-                      <DatePicker
-                        required
-                        id="rentDate"
-                        selected={rentDate}
-                        onChange={handleRentDateChange}
-                        dateFormat="yyyy-MM-dd"
-                        className="form-control"
-                        filterDate={rentDateFilter}
-                        minDate={today}
-                      />
-                    </Form.Group>
-                    <Form.Group
-                      as={Col}
-                      className="mb-3"
-                      controlId="formBasicReturnDate"
-                    >
-                      <Form.Label>Return Date</Form.Label>
-                      <DatePicker
-                        required
-                        id="returnDate"
-                        selected={returnDate}
-                        onChange={handleReturnDateChange}
-                        dateFormat="yyyy-MM-dd"
-                        className="form-control"
-                        filterDate={returnDateFilter}
-                        minDate={rentDate ? addDays(rentDate, 1) : null}
-                      />
-                    </Form.Group>
-                  </Row>
-                  <Form.Group className="mb-3" controlId="formBasicDuration">
+                  <Form.Group
+                    as={Col}
+                    className="mb-3"
+                    controlId="formBasicDuration"
+                  >
                     <Form.Label>Duration (in days)</Form.Label>
-                    <Form.Control
-                      disabled
-                      type="number"
-                      placeholder="Duration"
+                    <Form.Select
+                      required
                       value={duration}
-                    />
-                  </Form.Group>
-                </>
-              )}
-              {appType === "Sample" && (
-                <>
-                  <Row>
-                    <Form.Group
-                      as={Col}
-                      className="mb-3"
-                      controlId="formBasicQty"
+                      onChange={(e) => setDuration(e.target.value)}
                     >
-                      <Form.Label>Quantity</Form.Label>
-                      <Form.Control
-                        required
-                        type="number"
-                        placeholder="Quantity"
-                        value={qty}
-                        onChange={(e) => setQty(e.target.value)}
-                      />
-                    </Form.Group>
-                    <Col xs={8}>
-                      <Form.Group
-                        className="mb-3"
-                        controlId="formBasicSampleType"
-                      >
-                        <Form.Label>Sample Type</Form.Label>
-                        <Form.Control
-                          required
-                          type="text"
-                          placeholder="Type"
-                          value={sampleType}
-                          onChange={(e) => setSampleType(e.target.value)}
-                        />
-                      </Form.Group>
-                    </Col>
-                  </Row>
-                </>
-              )}
-            </div>
+                      <option value="0">Choose</option>
+                      {durations.map((duration, index) => (
+                        <option key={index} value={duration}>
+                          {duration}
+                        </option>
+                      ))}
+                    </Form.Select>
+                  </Form.Group>
+                </Row>
+              </>
+            )}
           </div>
 
           {appType === "" ? (
             <></>
           ) : (
             <div className="d-flex justify-content-center mt-3">
-              <Button variant="success" type="submit">
+              <Button variant="dark" type="submit">
                 Apply
               </Button>
             </div>
