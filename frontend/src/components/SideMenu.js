@@ -9,6 +9,7 @@ import {
   Boxes,
   FileText,
   Microscope,
+  Users2
 } from "lucide-react";
 
 const SideMenu = ({ logout, isAuthenticated, user }) => {
@@ -44,6 +45,10 @@ const SideMenu = ({ logout, isAuthenticated, user }) => {
                     <Nav.Link href="/dashboard">
                       <BarChart3 size={30} className="link-icon" />
                       <h5>Dashboard</h5>
+                    </Nav.Link>
+                    <Nav.Link href="/staffs-list">
+                      <Users2 size={30} className="link-icon" />
+                      <h5>Lab Staffs</h5>
                     </Nav.Link>
                     <Nav.Link href="/equipment-list">
                       <Boxes size={30} className="link-icon" />
@@ -82,68 +87,6 @@ const SideMenu = ({ logout, isAuthenticated, user }) => {
             </Navbar.Offcanvas>
           </Container>
         </Navbar>
-        //   <div className="sidebar">
-        //     <div className="my-4 d-flex justify-content-evenly">
-        //   <UserCircle2 size={32} />
-        //  <h4>{user?.name}</h4>
-        //   </div>
-
-        //     <hr
-        //       style={{
-        //         background: "white",
-        //         color: "white",
-        //         borderColor: "white",
-        //         height: "3px",
-        //         marginInline: 20,
-        //       }}
-        //     />
-        //     {user?.role == "RO" && (
-        //       <Nav className="flex-column">
-        //         <Nav.Link href="/dashboard">
-        //           <BarChart3 size={30} className="link-icon"/>
-        //           <h5>Dashboard</h5>
-        //         </Nav.Link>
-        //         <Nav.Link href="/equipment-list">
-        //           <Boxes size={30} className="link-icon"/>
-        //           <h5>Equipments</h5>
-        //         </Nav.Link>
-        //         <Nav.Link href="/servicesapp-list">
-        //           <FileText size={30} className="link-icon"/>
-        //           <h5>Services Application</h5>
-        //         </Nav.Link>
-        //       </Nav>
-        //     )}
-        //     {user?.role == "LS" && (
-        //       <Nav className="flex-column">
-        //         <Nav.Link href="/servicesapp-list">
-        //           <FileText />
-        //           <h5>Services Application</h5>
-        //         </Nav.Link>
-        //       </Nav>
-        //     )}
-        //     {user?.role == "C" && (
-        //       <Nav className="flex-column">
-        //         <Nav.Link href="/services">
-        //           <Microscope size={30} className="link-icon"/>
-        //           <h5>Services</h5>
-        //         </Nav.Link>
-        //         <Nav.Link href="/servicesapp-list">
-        //           <FileText size={30} className="link-icon"/>
-        //          <h5>Lab Application</h5>
-        //         </Nav.Link>
-        //       </Nav>
-        //     )}
-
-        //     <div className="sidebar-footer">
-        //       <Button
-        //         variant="secondary"
-        //         className="logout-button"
-        //         onClick={logout_user}
-        //       >
-        //         Logout
-        //       </Button>
-        //     </div>
-        //   </div>
       )}
     </>
   );

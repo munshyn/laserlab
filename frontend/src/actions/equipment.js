@@ -57,7 +57,7 @@ export const getAllEquipment = () => async (dispatch) => {
       payload: res.data,
     });
 
-    return "SUCCESS";
+    return res.data;
   } catch (err) {
     return "FAILED";
   }

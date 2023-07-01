@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { connect } from "react-redux";
 import {
   updateServiceApp,
@@ -38,10 +38,11 @@ const ManageServicesApp = ({
   const [equipmentId, setEquipmentId] = useState(null);
   const [equipmentName, setEquipmentName] = useState(null);
   const [equipmentLocation, setEquipmentLocation] = useState(null);
-  const [equipmentAvailability, setAvailability] = useState(null);
+  const [equipmentStatus, setEquipmentStatus] = useState(null);
   const [staff, setStaff] = useState({});
 
   // const [updateSuccess, setUpdateSuccess] = useState("");
+  const fileInputRef = useRef(null);
 
   const handleFileSelect = (e) => {
     const file = e.target.files[0];
@@ -49,6 +50,10 @@ const ManageServicesApp = ({
     setAnalysisReport(file);
 
     console.log("Selected file:", file);
+  };
+
+  const handleClearFile = () => {
+    fileInputRef.current.value = '';
   };
 
   const handleDownload = async (fileURL) => {
@@ -72,7 +77,7 @@ const ManageServicesApp = ({
       setEquipmentId(equipmentData.equipmentId);
       setEquipmentName(equipmentData.name);
       setEquipmentLocation(equipmentData.location);
-      setAvailability(equipmentData.availability);
+      setEquipmentStatus(equipmentData.status);
     } else await getAllEquipment();
 
     setCustomer(
@@ -146,6 +151,36 @@ const ManageServicesApp = ({
     console.log(updatedServiceApp);
 
     await updateServiceApp(updatedServiceApp, serviceApp.appId);
+
+    if (updatedStatus == "In Progress") {
+      const updatedEquipment = {
+        regNum: equipment.regNum,
+        name: equipment.name,
+        quantity: equipment.qty,
+        location: equipmentLocation,
+        registered: equipment.registered,
+        price: equipment.price,
+        status: "Rented",
+        availability: 0,
+        hasService: equipment.hasService,
+      };
+
+      await updateEquipment(updatedEquipment, equipment.equipmentId);
+    } else if (updatedStatus == "Completed") {
+      const updatedEquipment = {
+        regNum: equipment.regNum,
+        name: equipment.name,
+        quantity: equipment.qty,
+        location: equipmentLocation,
+        registered: equipment.registered,
+        price: equipment.price,
+        status: "Good",
+        availability: 1,
+        hasService: equipment.hasService,
+      };
+
+      await updateEquipment(updatedEquipment, equipment.equipmentId);
+    }
   };
 
   const onUpdateEquipment = async (e) => {
@@ -159,7 +194,7 @@ const ManageServicesApp = ({
       registered: equipment.registered,
       price: equipment.price,
       status: equipment.status,
-      availability: equipmentAvailability,
+      availability: equipment.availability,
       hasService: equipment.hasService,
     };
 
@@ -230,7 +265,7 @@ const ManageServicesApp = ({
         <h1>Service Application</h1>
       </div>
       <div className="content-status">
-        <div className="d-flex justify-content-between mb-3">
+        <div className="d-flex justify-content-between mb-3 flex-sm-column flex-md-row align-items-sm-center">
           <div className="d-flex">
             <h3 className="fw-bold">Service Type</h3>
             <h3 className="text-success fw-bold fst-italic ms-3">
@@ -242,8 +277,8 @@ const ManageServicesApp = ({
             <h3>{renderBadge(isApproved, status)}</h3>
           </div>
         </div>
-        <div className="d-flex">
-          <div className="d-flex flex-column me-4 w-50">
+        <div className="d-flex flex-sm-column flex-md-row">
+          <div className="d-flex flex-column mb-sm-4 me-md-4 w-50 w-sm-auto w-100">
             <Card border="secondary">
               <Card.Header className="fw-bold fs-4">
                 Application Details
@@ -310,26 +345,34 @@ const ManageServicesApp = ({
                   <hr />
                   <div className="d-flex justify-content-between">
                     <Card.Title>Status</Card.Title>
-                    <Card.Title>{equipment?.status || "N/A"}</Card.Title>
+                    <Card.Title>{equipmentStatus || "N/A"}</Card.Title>
                   </div>
                 </Card.Body>
               </Card>
             )}
-            {(user.role === "LS" || analysisReport !== null) && (
+            {(user.role === "LS" || analysisReport !== null) && status !== "Approved" && (
               <Card border="secondary" className="mt-4">
                 <Card.Header className="fw-bold fs-4 d-flex justify-content-between">
                   <p>Analysis Report</p>
                   <div>
-                    {user.role === "LS" && (
+                    {user.role === "LS" && fileInputRef.current?.value != '' && (
                       <Button
                         variant="dark"
                         className="me-2"
-                        onClick={(e) => onUpdateReport(e)}
+                        onClick={(e) => {
+                          setIsLoading(true);
+                          setTimeout(() => {
+                            onUpdateReport(e);
+                            handleClearFile();
+                            setIsLoading(false);
+                          }, 2000);
+                        }}
+                        disabled={isLoading}
                       >
-                        Upload
+                        {isLoading ? "Loading..." : "Upload"}
                       </Button>
                     )}
-                    {analysisReport !== null && (
+                    {analysisReport !== null && typeof analysisReport === 'string' && (
                       <Button
                         variant="outline-dark"
                         onClick={() => handleDownload(analysisReport)}
@@ -344,7 +387,12 @@ const ManageServicesApp = ({
                     {analysisReport === null && (
                       <Card.Title>No File Yet</Card.Title>
                     )}
-                    {analysisReport !== null && (
+                    {analysisReport !== null && typeof analysisReport !== 'string' && (
+                      <Card.Title>
+                        {analysisReport.name}
+                      </Card.Title>
+                    )}
+                    {analysisReport !== null && typeof analysisReport === 'string' && (
                       <Card.Title>
                         {analysisReport.substring(
                           analysisReport.indexOf(".com/") + 5
@@ -352,14 +400,14 @@ const ManageServicesApp = ({
                       </Card.Title>
                     )}
                     {user.role === "LS" && (
-                      <input type="file" onChange={handleFileSelect} />
+                      <input type="file" onChange={handleFileSelect} ref={fileInputRef}/>
                     )}
                   </div>
                 </Card.Body>
               </Card>
             )}
           </div>
-          <div className="d-flex flex-column w-50">
+          <div className="d-flex flex-column w-50 w-sm-auto w-100">
             <Card border="secondary">
               <Card.Header className="fw-bold fs-4">
                 Customer Details
@@ -701,28 +749,14 @@ const ManageServicesApp = ({
                     </Form.Group>
                   )}
                   {serviceApp.equipmentId !== null && (
-                    <>
-                      <Form.Group className="mb-3">
-                        <Form.Label>Location</Form.Label>
-                        <Form.Control
-                          type="text"
-                          value={equipmentLocation}
-                          onChange={(e) => setEquipmentLocation(e.target.value)}
-                        />
-                      </Form.Group>
-                      <Form.Group className="mb-3">
-                        <Form.Label>Availability</Form.Label>
-                        <Form.Select
-                          value={equipmentAvailability?.toString()}
-                          onChange={(e) =>
-                            setAvailability(e.target.value === "true")
-                          }
-                        >
-                          <option value="true">Available</option>
-                          <option value="false">Not available</option>
-                        </Form.Select>
-                      </Form.Group>
-                    </>
+                    <Form.Group className="mb-3">
+                      <Form.Label>Location</Form.Label>
+                      <Form.Control
+                        type="text"
+                        value={equipmentLocation}
+                        onChange={(e) => setEquipmentLocation(e.target.value)}
+                      />
+                    </Form.Group>
                   )}
                 </Form>
               </Modal.Body>

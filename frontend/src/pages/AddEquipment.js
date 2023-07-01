@@ -235,7 +235,6 @@ const AddEquipment = ({ equipments, addEquipment }) => {
 };
 
 const mapStateToProps = (state) => ({
-  // user: state.auth.user,
   equipments: state.equipment,
 });
 

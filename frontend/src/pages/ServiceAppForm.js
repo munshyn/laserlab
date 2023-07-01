@@ -7,11 +7,9 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Alert from "react-bootstrap/Alert";
-import utmlogo from "../assets/utm-logo.svg";
 import InputGroup from "react-bootstrap/InputGroup";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { differenceInDays, addDays } from "date-fns";
 
 const ServiceAppForm = ({
   equipments,
@@ -252,13 +250,14 @@ const ServiceAppForm = ({
               />
             </Form.Group>
             <Row>
-              <Form.Group as={Col} className="mb-3" controlId="formBasicTitle">
+              <Col sm={12} md={8}>
+              <Form.Group className="mb-3" controlId="formBasicTitle">
                 <Form.Label>Type of Project</Form.Label>
                 <Form.Select
                   required
                   value={projectType}
                   onChange={(e) => setProjectType(e.target.value)}
-                >
+                  >
                   <option value="">Choose</option>
                   {projectTypes.map((projectType, index) => (
                     <option key={index} value={projectType}>
@@ -267,6 +266,7 @@ const ServiceAppForm = ({
                   ))}
                 </Form.Select>
               </Form.Group>
+                  </Col>
               <Form.Group
                 as={Col}
                 className="mb-3"
@@ -286,7 +286,7 @@ const ServiceAppForm = ({
               </Form.Group>
             </Row>
             <Row>
-              <Col xs={8}>
+              <Col md={8} sm={12}>
                 <Form.Group className="mb-3" controlId="formBasicSampleType">
                   <Form.Label>Type of Samples</Form.Label>
                   <Form.Control
@@ -375,7 +375,7 @@ const ServiceAppForm = ({
           {appType === "" ? (
             <></>
           ) : (
-            <div className="d-flex justify-content-center mt-3">
+            <div className="d-flex justify-content-center mt-3 mb-5">
               <Button variant="dark" type="submit">
                 Apply
               </Button>

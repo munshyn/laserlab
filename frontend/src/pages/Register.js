@@ -54,22 +54,22 @@ const Register = ({ signup }) => {
           if (data.password) {
             console.log(data.password[0]);
             setPassRef(true);
-          } else if (data.email === "users with this email already exists.") {
+          } else if (data.email == "users with this email already exists.") {
             setEmailRef(true);
           } else {
             setAccountCreated(true);
             setTimeout(() => {
-            setEmailRef("");
-            setPassRef("");
-            setPasswordNotMatch(false);
-            setMatrixNumNotValid(false);
-            setName("");
-            setEmail("");
-            setPassword("");
-            setRePassword("");
-            setIsStudent(false);
-            setMatrixNum("");
-            }, 3000)
+              setEmailRef("");
+              setPassRef("");
+              setPasswordNotMatch(false);
+              setMatrixNumNotValid(false);
+              setName("");
+              setEmail("");
+              setPassword("");
+              setRePassword("");
+              setIsStudent(false);
+              setMatrixNum("");
+            }, 3000);
           }
         } else {
           setPasswordNotMatch(true);
@@ -95,20 +95,22 @@ const Register = ({ signup }) => {
         if (data.password) {
           console.log(data.password[0]);
           setPassRef(true);
-        } else if (data.email === "users with this email already exists.") {
+        } else if (data.email == "users with this email already exists.") {
           setEmailRef(true);
         } else {
           setAccountCreated(true);
-          setEmailRef("");
-          setPassRef("");
-          setPasswordNotMatch(false);
-          setMatrixNumNotValid(false);
-          setName("");
-          setEmail("");
-          setPassword("");
-          setRePassword("");
-          setIsStudent(false);
-          setMatrixNum("");
+          setTimeout(() => {
+            setEmailRef("");
+            setPassRef("");
+            setPasswordNotMatch(false);
+            setMatrixNumNotValid(false);
+            setName("");
+            setEmail("");
+            setPassword("");
+            setRePassword("");
+            setIsStudent(false);
+            setMatrixNum("");
+          }, 3000);
         }
       } else {
         setPasswordNotMatch(true);
@@ -180,35 +182,20 @@ const Register = ({ signup }) => {
           </p>
           <Form onSubmit={(e) => onSubmit(e)}>
             <Row>
-              <Form.Group as={Col} className="mb-3" controlId="formBasicName">
-                <Form.Label>Name</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Enter name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                />
-                <Form.Text className="text-muted">Give me your name.</Form.Text>
-              </Form.Group>
-              <Form.Group
-                as={Col}
-                className="mb-3"
-                controlId="formBasicPassword"
-              >
-                <Form.Label>Password</Form.Label>
-                <Form.Control
-                  type="password"
-                  placeholder="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  minLength={8}
-                />
-                <Form.Text className="text-muted">
-                  Password must be more than 8 letters.
-                </Form.Text>
-              </Form.Group>
-            </Row>
-            <Row>
+              <Col xs={12} md={6}>
+                <Form.Group className="mb-3" controlId="formBasicName">
+                  <Form.Label>Name</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Enter name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                  />
+                  <Form.Text className="text-muted">
+                    Give me your name.
+                  </Form.Text>
+                </Form.Group>
+              </Col>
               <Form.Group as={Col} className="mb-3" controlId="formBasicEmail">
                 <Form.Label>Email address</Form.Label>
                 <Form.Control
@@ -221,6 +208,23 @@ const Register = ({ signup }) => {
                   We'll never share your email with anyone else.
                 </Form.Text>
               </Form.Group>
+            </Row>
+            <Row>
+              <Col sm={12} md={6}>
+                <Form.Group className="mb-3" controlId="formBasicPassword">
+                  <Form.Label>Password</Form.Label>
+                  <Form.Control
+                    type="password"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    minLength={8}
+                  />
+                  <Form.Text className="text-muted">
+                    Password must be more than 8 letters.
+                  </Form.Text>
+                </Form.Group>
+              </Col>
               <Form.Group
                 as={Col}
                 className="mb-3"

@@ -102,7 +102,7 @@ const ManageServicesApp = ({
         <h1>Service Application</h1>
       </div>
       <div className="content-status">
-        <div className="d-flex justify-content-between mb-3">
+        <div className="d-flex justify-content-between mb-3 flex-sm-column flex-md-row align-items-sm-center">
           <div className="d-flex">
             <h3 className="fw-bold">Service Type</h3>
             <h3 className="text-success fw-bold fst-italic ms-3">
@@ -114,8 +114,8 @@ const ManageServicesApp = ({
             <h3>{renderBadge(isApproved, status)}</h3>
           </div>
         </div>
-        <div className="d-flex">
-          <div className="d-flex flex-column me-4 w-50">
+        <div className="d-flex flex-sm-column flex-md-row">
+          <div className="d-flex flex-column mb-sm-4 me-md-4 w-50 w-sm-auto w-100">
             <Card border="secondary">
               <Card.Header className="fw-bold fs-4">
                 Application Details
@@ -209,7 +209,7 @@ const ManageServicesApp = ({
               </Card>
             )}
           </div>
-          <div className="d-flex flex-column w-50">
+          <div className="d-flex flex-column w-50 w-sm-auto w-100">
             <Card border="secondary">
               <Card.Header className="fw-bold fs-4">Your Details</Card.Header>
               <Card.Body className="d-flex flex-column">

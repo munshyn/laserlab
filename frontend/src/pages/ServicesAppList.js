@@ -3,8 +3,6 @@ import { Tabs, Tab } from "react-bootstrap";
 import ListingServices from "../components/ListingServicesApp";
 import { connect } from "react-redux";
 import { getAllServicesApp } from "../actions/servicesapp";
-import { getUsers } from "../actions/auth";
-import { getAllEquipment } from "../actions/equipment";
 
 const ServicesAppList = ({ servicesApp, getAllServicesApp, user }) => {
   const [key, setKey] = useState("0");
@@ -26,9 +24,6 @@ const ServicesAppList = ({ servicesApp, getAllServicesApp, user }) => {
         <h1>Lab Service Application</h1>
       </div>
       <div className="listing-container">
-        <div className="listing-header">
-          
-        </div>
         <Tabs
           id="controlled-tab-example"
           activeKey={key}

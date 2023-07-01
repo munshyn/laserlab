@@ -77,6 +77,29 @@ export const getUsers = () => async (dispatch) => {
   }
 };
 
+export const deleteUser = (userId) => async (dispatch) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `JWT ${localStorage.getItem("access")}`,
+      Accept: "*/*",
+    },
+  };
+
+  try {
+    await axios.delete(
+      `${process.env.REACT_APP_API_URL}/user/rud/${userId}/`,
+      config
+    );
+
+    dispatch(getUsers());
+
+    return "SUCCESS";
+  } catch (err) {
+    return err.response.data.error;
+  }
+};
+
 export const checkTokenExpiration = () => (dispatch) => {
   const expiresAt = localStorage.getItem("expiresAt");
   const currentTime = Math.floor(Date.now() / 1000);
@@ -184,15 +207,56 @@ export const login = (email, password) => async (dispatch) => {
   }
 };
 
-export const signup =
-  (email, name, role, password, re_password, isStudent, matrixNum) => async (dispatch) => {
+export const addStaff =
+  (email, name, role, password, re_password, isStudent, matrixNum) =>
+  async () => {
     const config = {
       headers: {
         "Content-Type": "application/json",
       },
     };
 
-    const body = JSON.stringify({ email, name, role, password, re_password, isStudent, matrixNum });
+    const body = JSON.stringify({
+      email,
+      name,
+      role,
+      password,
+      re_password,
+      isStudent,
+      matrixNum,
+    });
+
+    try {
+      const res = await axios.post(
+        `${process.env.REACT_APP_API_URL}/auth/users/`,
+        body,
+        config
+      );
+
+      return res.data;
+    } catch (err) {
+      return err.response.data;
+    }
+  };
+
+export const signup =
+  (email, name, role, password, re_password, isStudent, matrixNum) =>
+  async (dispatch) => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const body = JSON.stringify({
+      email,
+      name,
+      role,
+      password,
+      re_password,
+      isStudent,
+      matrixNum,
+    });
 
     try {
       const res = await axios.post(
@@ -205,6 +269,7 @@ export const signup =
         type: SIGNUP_SUCCESS,
         payload: res.data,
       });
+
       return res.data;
     } catch (err) {
       dispatch({
@@ -237,6 +302,7 @@ export const verify = (uid, token) => async (dispatch) => {
     dispatch({
       type: ACTIVATION_FAIL,
     });
+    console.log(err)
   }
 };
 

@@ -105,7 +105,7 @@ export const getAllServicesApp = () => async (dispatch) => {
 
       console.log(res.data);
 
-      return "SUCCESS";
+      return res.data;
     } catch (err) {
       return "FAILED";
     }

@@ -16,14 +16,14 @@ class UsersManager(BaseUserManager):
 
         return user
     
-    def create_superuser(self, email, name, role, password=None, **extra_fields):
+    def create_superuser(self, email, name, role, isStudent, matrixNum, password=None, **extra_fields):
         if not email:
             raise ValueError('An email is required')
         if not password:
             raise ValueError('A password is required')
 
         email = self.normalize_email(email)
-        user = self.create_user(email, name, role, password, **extra_fields)
+        user = self.create_user(email, name, role, isStudent, matrixNum, password, **extra_fields)
 
         user.is_superuser = True
         user.save()
@@ -37,7 +37,7 @@ class Users(AbstractBaseUser, PermissionsMixin):
     name = models.CharField(max_length=100)
     phone_number = models.CharField(max_length=20, blank=True, null=True, unique=True)
     role = models.CharField(max_length=10)
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
     isStudent = models.BooleanField(null=True, blank=True, default=False)
     matrixNum = models.CharField(max_length=20, null=True, blank=True)
 

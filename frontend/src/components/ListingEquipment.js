@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Table, Dropdown } from "react-bootstrap";
+import { Pagination, Table, Dropdown, Badge } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 const ListingEquipment = ({ items, onDelete }) => {
@@ -18,8 +18,45 @@ const ListingEquipment = ({ items, onDelete }) => {
     navigate("/edit-equipment", { state: { equipment } });
   };
 
+  const renderBadge = (status) => {
+    switch (status) {
+      case "Require Fix":
+        return (
+          <Badge bg="warning" text="dark">
+            {status}
+          </Badge>
+        );
+      case "Damaged":
+        return (
+          <Badge bg="danger" text="light">
+            {status}
+          </Badge>
+        );
+      case "Good":
+        return (
+          <Badge bg="success" text="light">
+            {status}
+          </Badge>
+        );
+      case "Maintenance":
+        return (
+          <Badge bg="secondary" text="light">
+            {status}
+          </Badge>
+        );
+      case "Rented":
+        return (
+          <Badge bg="info" text="light">
+            {status}
+          </Badge>
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
-    <Table dark striped hover bordered={false} className="listing-content">
+    <Table striped hover bordered={false} className="listing-content">
       <thead>
         <tr>
           <th>Registration Number</th>
@@ -40,7 +77,7 @@ const ListingEquipment = ({ items, onDelete }) => {
             <td>{item.name}</td>
             <td>{item.location}</td>
             <td>{item.quantity}</td>
-            <td>{item.status}</td>
+            <td>{renderBadge(item.status)}</td>
             <td>
               {item.hasService ? (
                 <p style={{ color: "green" }}>Yes</p>

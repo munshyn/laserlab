@@ -19,15 +19,10 @@ a{
 
 .sidebar {
   background-color: #ffffff;
-  width: 13vw;
+  width: 22rem;
   display: flex;
   flex-direction: column;
   color: #000000;
-}
-
-.sidebar-footer {
-  padding: 10px;
-  text-align: center;
 }
 
 .link-icon,
@@ -116,6 +111,7 @@ a{
   justify-content: space-around;
   box-shadow: 0px 8px 10px grey;
   width: 60vw;
+  height: auto;
   margin: 0 auto auto auto;
 }
 
@@ -169,6 +165,7 @@ a{
   left: 0;
   bottom: 0;
   width: 100%;
+  font-size: 0.9em;
 }
 
 .footer-heading {
@@ -182,94 +179,6 @@ a{
   color: #ccc;
   line-height: 1.5;
   margin-top: 0.2rem;
-}
-
-@media (max-height: 100vh) {
-  .main-content {
-    min-height: 100vh;
-  }
-  
-  .footer {
-    position: static;
-  }
-} 
-
-@media (max-width: 768px) {
-  .sidebar {
-    padding: 5px;
-    width: 70px;
-  }
-
-  .sidebar.expanded {
-    width: 150px;
-  }
-
-  .sidebar-header,
-  .sidebar .nav-link {
-    padding: 5px;
-    margin-bottom: 5px;
-  }
-
-  .header h2,
-  .header-img h1 {
-    font-size: 3em;
-  }
-
-  .content {
-    width: 90vw;
-    flex-direction: column;
-    margin-bottom: 2rem;
-  }
-
-  .greetings,
-  .login-form {
-    padding: 2rem 2rem;
-    width: 100%;
-  }
-
-  .center-form {
-    width: 80vw;
-    padding: 5vh 2vw;
-  }
-
-  .footer {
-    flex-direction: column;
-    padding: 2rem 1rem;
-  }
-}
-
-.box-container {
-  display: flex;
-}
-
-.box {
-  width: 100%;
-  padding: 20px;
-  border-radius: 5px;
-  background-color: #4a4a4a;
-}
-
-.box-image {
-  width: 100%;
-  height: auto;
-}
-
-.box-description {
-  margin-top: 10px;
-}
-
-.box-description h3 {
-  font-size: 18px;
-  margin-bottom: 5px;
-}
-
-.box-description p {
-  font-size: 14px;
-  color: #888;
-}
-
-.box-link{
-  text-decoration: none;
 }
 
 .listing-container {
@@ -310,83 +219,101 @@ a{
   justify-content: flex-end;
 }
 
-/*.listing-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  flex: 1 1 0;
-}
-
-.listing-content {
-  margin-bottom: 1rem;
-}*/
-
-/* .listing-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 0.5rem;
-}  */
-
-/* .sidebar {
-  background-color: #373737;
-  height: 100vh;
-  width: 250px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-start;
-  color: #fff;
-}
-
-.nav-menu {
-  list-style: none;
-}
-
-.nav-items {
-  display: flex;
-  justify-content: space-around;
-  font-size: 1.5em;
+@media (max-height: 100vh) {
+  .main-content {
+    min-height: 100vh;
+  }
   
-}
-
-.nav-links {
-  color: #fff;
-  text-decoration: none;
-} */
-
-/* .App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+  .footer {
+    position: static;
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+@media (max-width: 768px) {
+  
+  .main-content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .content-status {
+    border-radius: 10px;
+    box-shadow: 0px 8px 10px grey;
+    width: 80vw;
+    margin: 0 auto auto auto;
+    padding: 1rem;
+  }
+  
+  .greetings {
+    width: 20vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 5vh 0vw;
+  }
+  
+  .greetings h3 {
+    font-weight: 900;
+    font-size: 50px;
+    color: grey;
+    text-shadow: 2px 2px 4px #4a4a4a;
+    padding-bottom: 2vh;
+  }
+
+  .listing-content .listing-item td {
+    text-align: left;
+    padding: 0.9rem 0.9rem;
+    font-size: 0.9em;
+  }
+
+  .listing-content th {
+    font-size: 0.8em;
+  }
+  
+  .app-status tr td {
+    padding: 30px 10px;
+    width: 40%;
+    font-size: 25px;
+  }
+
+  .service-form {
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    margin: auto;
+  }
+  
+  .content-header {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .header h2,
+  .header-img h1 {
+    font-size: 3em;
+  }
+
+  .content {
+    width: 90vw;
+    flex-direction: column;
+    margin-bottom: 2rem;
+  }
+
+  .greetings,
+  .login-form {
+    padding: 2rem 2rem;
+    width: 100%;
+  }
+
+  .center-form {
+    width: 100%;
+    padding: 2rem;
+  }
+
+  .footer {
+    flex-direction: column;
+    padding: 2rem 1rem;
+  }
 }
 
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-} */

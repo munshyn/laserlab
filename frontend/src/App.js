@@ -19,6 +19,8 @@ import ServiceAppForm from "./pages/ServiceAppForm";
 import ServiceApp from "./pages/ServiceApp";
 import ServicesAppList from "./pages/ServicesAppList";
 import ManageServicesApp from "./pages/ManageServicesApp";
+import RegisterStaff from "./pages/RegisterStaff";
+import StaffsList from "./pages/StaffsList";
 
 function App() {
   return (
@@ -39,6 +41,8 @@ function App() {
           if not authenticated, it will bring user back to login page*/}
           <Route element={<RequireAuth />}> 
             <Route path="/" element={<Home />} />
+            <Route path="/staffs-list" element={<StaffsList />} />
+            <Route path="/register-staff" element={<RegisterStaff />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/equipment-list" element={<EquipmentList />} />
             <Route path="/add-equipment" element={<AddEquipment />} />

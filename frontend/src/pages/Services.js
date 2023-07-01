@@ -1,21 +1,24 @@
 import Button from "react-bootstrap/Button";
 import React, { useEffect } from "react";
-import utmlogo from "../assets/utm-logo.svg";
+import fiber_coupler from "../assets/fiber_coupler.jpg";
+import laser_rental from "../assets/laser_rental.jpg";
+import laser_repairing from "../assets/laser_repairing.jpg";
+import libs from "../assets/libs.jpg";
+import tfd from "../assets/tfd.png";
+import ftir from "../assets/ftir.jpeg";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import Box from "../components/Box";
 import { Card, ListGroup } from "react-bootstrap";
 
 const Services = () => {
-  useEffect(() => {}, []);
-
   const servicesList = [
-    "Laser Repairing",
-    "Laser Rental",
-    "Elemental Analysis by LIBS",
-    "Fiber Coupler",
-    "Fourier Transform Infrared Spectroscopy (FTIR)",
-    "Thin Film Deposition",
+    { name: "Laser Repairing", image: laser_repairing },
+    { name: "Laser Rental", image: laser_rental },
+    { name: "Elemental Analysis by LIBS", image: libs },
+    { name: "Fiber Coupler", image: fiber_coupler },
+    { name: "Fourier Transform Infrared Spectroscopy (FTIR)", image: ftir },
+    { name: "Thin Film Deposition", image: tfd },
   ];
 
   return (
@@ -24,24 +27,35 @@ const Services = () => {
         <h1>Services</h1>
       </div>
       <div className="container-md">
-        <div>
+        <div className="w-100 d-flex flex-column align-items-center">
           <h2>What we offer?</h2>
-          <ListGroup className="custom-list">
-            {servicesList.map((item, index) => (
-              <ListGroup.Item key={index}>{item}</ListGroup.Item>
-            ))}
-          </ListGroup>
-          {/* {servicesList.map((item, index) => (
-  <Card key={index} className="custom-card">
-    <Card.Body>
-      <Card.Text>{item}</Card.Text>
-    </Card.Body>
-  </Card>
-))} */}
-          <div className="d-flex justify-content-center mt-4">
-            <Link to="/service-form">
-              <Button variant="success">Apply now</Button>
-            </Link>
+          <div className="d-flex flex-wrap justify-content-center align-items-center">
+            <div className="d-flex flex-wrap justify-content-between align-items-center justify-content-sm-center align-items-sm-center">
+              {servicesList.slice(0, 3).map((item, index) => (
+                <Card key={index} style={{ width: "20rem" }} className="m-2">
+                  <Card.Img variant="top" src={item.image} style={{ height: "200px" }}/>
+                  <Card.Body>
+                    <Card.Title>{item.name}</Card.Title>
+                    <Link to="/service-form">
+                      <Button variant="dark">Apply now</Button>
+                    </Link>
+                  </Card.Body>
+                </Card>
+              ))}
+            </div>
+            <div className="d-flex flex-wrap justify-content-between align-items-center justify-content-sm-center align-items-sm-center">
+              {servicesList.slice(3).map((item, index) => (
+                <Card key={index} style={{ width: "20rem" }} className="m-2">
+                  <Card.Img variant="top" src={item.image} style={{ height: "200px" }}/>
+                  <Card.Body>
+                    <Card.Title>{item.name}</Card.Title>
+                    <Link to="/service-form">
+                      <Button variant="dark">Apply now</Button>
+                    </Link>
+                  </Card.Body>
+                </Card>
+              ))}
+            </div>
           </div>
         </div>
       </div>
