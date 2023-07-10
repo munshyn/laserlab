@@ -186,7 +186,7 @@ a{
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 16px;
   margin: 0 auto auto auto;
-  height: 60vh;
+  height: auto;
 }
 
 .listing-content .listing-item td {
@@ -217,6 +217,14 @@ a{
 .content-header {
   display: flex;
   justify-content: flex-end;
+}
+
+.chart-box{
+  width: 75%;
+}
+
+.activities{
+  width: 25%;
 }
 
 @media (max-height: 100vh) {
@@ -314,6 +322,15 @@ a{
   .footer {
     flex-direction: column;
     padding: 2rem 1rem;
+  }
+
+  .chart-box{
+    width: 100%;
+    height: auto;
+  }
+  
+  .activities{
+    width: 100%;
   }
 }
 

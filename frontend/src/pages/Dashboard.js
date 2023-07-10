@@ -189,7 +189,7 @@ const Dashboard = ({ getAllServicesApp, getAllEquipment, isAuthenticated }) => {
           </Card>
         </div>
         <div className="d-flex justify-content-between mt-5 flex-md-row flex-sm-column">
-          <div className="w-md-75 mx-md-2 d-flex flex-column flex-sm-fill">
+          <div className="chart-box mx-md-2 d-flex flex-column">
             <h3>Lab Service Applications for the last seven days</h3>
             <div className="w-100 h-100" ref={chartContainerRef}>
               <BarChart
@@ -211,7 +211,7 @@ const Dashboard = ({ getAllServicesApp, getAllEquipment, isAuthenticated }) => {
               </BarChart>
             </div>
           </div>
-          <div className="d-flex flex-column w-md-25 flex-sm-fill mx-md-2 mt-sm-3 mb-5">
+          <div className="activities d-flex flex-column mx-md-2 mt-sm-3 mb-5">
             <h3>Recent Activities</h3>
             {servicesAppRecent.length > 0 &&
               servicesAppRecent.map((item, index) => {
