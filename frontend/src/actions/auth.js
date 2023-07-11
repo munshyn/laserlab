@@ -302,7 +302,6 @@ export const verify = (uid, token) => async (dispatch) => {
     dispatch({
       type: ACTIVATION_FAIL,
     });
-    console.log(err)
   }
 };
 

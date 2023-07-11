@@ -52,8 +52,8 @@ const AddEquipment = ({ equipments, addEquipment }) => {
     };
 
     const data = await addEquipment(newEquipment);   //Send the new equipment using
-                                                     //the addEquipment function
-    
+    //the addEquipment function
+
     if (data === "SUCCESS") {                         //Process the retrieved data
       setAddSuccess(true);                           //if it is success, it will
       setTimeout(() => {                             //give a pop up success message
@@ -96,17 +96,19 @@ const AddEquipment = ({ equipments, addEquipment }) => {
         {popup_box()}
         <Form onSubmit={(e) => onSubmit(e)} autoComplete="off">
           <Row className="mb-3">
-            <Form.Group as={Col} className="mb-3" controlId="formBasicRegNum">
-              <Form.Label>Registration Number</Form.Label>
-              <Form.Control
-                required
-                type="text"
-                placeholder="Enter Registration Number"
-                value={regNum}
-                onChange={(e) => setRegNum(e.target.value)}
-              />
-              <Form.Text className="text-muted">Eg. J001002</Form.Text>
-            </Form.Group>
+            <Col xs={12} sm={12} md={6}>
+              <Form.Group className="mb-3" controlId="formBasicRegNum">
+                <Form.Label>Registration Number</Form.Label>
+                <Form.Control
+                  required
+                  type="text"
+                  placeholder="Enter Registration Number"
+                  value={regNum}
+                  onChange={(e) => setRegNum(e.target.value)}
+                />
+                <Form.Text className="text-muted">Eg. J001002</Form.Text>
+              </Form.Group>
+            </Col>
             <Form.Group as={Col} className="mb-3" controlId="formBasicName">
               <Form.Label>Name</Form.Label>
               <Form.Control
@@ -120,25 +122,29 @@ const AddEquipment = ({ equipments, addEquipment }) => {
             </Form.Group>
           </Row>
           <Row className="mb-3">
-            <Form.Group as={Col} className="mb-3" controlId="formBasicLocation">
-              <Form.Label>Equipment Location</Form.Label>
-              <Form.Control
-                required
-                type="text"
-                placeholder="Location"
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-              />
-            </Form.Group>
-            <Form.Group as={Col} className="mb-3" controlId="formBasicQty">
-              <Form.Label>Quantity</Form.Label>
-              <Form.Control
-                type="number"
-                placeholder="Quantity"
-                value={qty}
-                onChange={(e) => setQty(e.target.value)}
-              />
-            </Form.Group>
+            <Col xs={12} sm={12} md={4}>
+              <Form.Group className="mb-3" controlId="formBasicLocation">
+                <Form.Label>Equipment Location</Form.Label>
+                <Form.Control
+                  required
+                  type="text"
+                  placeholder="Location"
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                />
+              </Form.Group>
+            </Col>
+            <Col xs={12} sm={12} md={4}>
+              <Form.Group className="mb-3" controlId="formBasicQty">
+                <Form.Label>Quantity</Form.Label>
+                <Form.Control
+                  type="number"
+                  placeholder="Quantity"
+                  value={qty}
+                  onChange={(e) => setQty(e.target.value)}
+                />
+              </Form.Group>
+            </Col>
             <Form.Group as={Col} className="mb-3" controlId="formBasicPrice">
               <Form.Label>Equipment Price (RM)</Form.Label>
               <Form.Control
@@ -151,21 +157,23 @@ const AddEquipment = ({ equipments, addEquipment }) => {
             </Form.Group>
           </Row>
           <Row className="mb-3">
-            <Form.Group as={Col} className="mb-3" controlId="formBasicStatus">
-              <Form.Label>Equipment Status</Form.Label>
-              <Form.Select
-                required
-                value={status}
-                onChange={(e) => setStatus(e.target.value)}
-              >
-                <option value="">Choose</option>
-                {statuses.map((status, index) => (
-                  <option key={index} value={status}>
-                    {status}
-                  </option>
-                ))}
-              </Form.Select>
-            </Form.Group>
+            <Col xs={12} sm={12} md={3}>
+              <Form.Group className="mb-3" controlId="formBasicStatus">
+                <Form.Label>Equipment Status</Form.Label>
+                <Form.Select
+                  required
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value)}
+                >
+                  <option value="">Choose</option>
+                  {statuses.map((status, index) => (
+                    <option key={index} value={status}>
+                      {status}
+                    </option>
+                  ))}
+                </Form.Select>
+              </Form.Group>
+            </Col>
             <Form.Group
               as={Col}
               className="mb-3"
@@ -208,8 +216,8 @@ const AddEquipment = ({ equipments, addEquipment }) => {
                 onChange={(e) => setHasService(e.target.value === "true")}
               />
             </Form.Group>
+            <Col xs={12} sm={12} md={3}></Col>
             <Form.Group
-              as={Col}
               className="mb-3"
               controlId="formBasicAvailability"
             >

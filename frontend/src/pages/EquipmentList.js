@@ -12,7 +12,6 @@ const EquipmentList = ({ equipments, getAllEquipment, deleteEquipment }) => {
 
   useEffect(() => {
     getAllEquipment();
-    console.log(equipments);
   }, [getAllEquipment]);
 
   const onDelete = (equipmentId) => {
@@ -96,7 +95,9 @@ const EquipmentList = ({ equipments, getAllEquipment, deleteEquipment }) => {
               </Button>
             </div>
           </div>
-          <ListingEquipment items={currentItems} onDelete={onDelete} />
+          <div className="table-container">
+            <ListingEquipment items={currentItems} onDelete={onDelete} />
+          </div>
         </div>
         <Pagination>
           {Array.from({ length: totalPages }, (_, index) => (

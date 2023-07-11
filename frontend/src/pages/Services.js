@@ -1,5 +1,5 @@
 import Button from "react-bootstrap/Button";
-import React, { useEffect } from "react";
+import React from "react";
 import fiber_coupler from "../assets/fiber_coupler.jpg";
 import laser_rental from "../assets/laser_rental.jpg";
 import laser_repairing from "../assets/laser_repairing.jpg";
@@ -8,8 +8,7 @@ import tfd from "../assets/tfd.png";
 import ftir from "../assets/ftir.jpeg";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import Box from "../components/Box";
-import { Card, ListGroup } from "react-bootstrap";
+import { Card } from "react-bootstrap";
 
 const Services = () => {
   const servicesList = [
@@ -30,7 +29,7 @@ const Services = () => {
         <div className="w-100 d-flex flex-column align-items-center">
           <h2>What we offer?</h2>
           <div className="d-flex flex-wrap justify-content-center align-items-center">
-            <div className="d-flex flex-wrap justify-content-between align-items-center justify-content-sm-center align-items-sm-center">
+            <div className="services-list">
               {servicesList.slice(0, 3).map((item, index) => (
                 <Card key={index} style={{ width: "20rem" }} className="m-2">
                   <Card.Img variant="top" src={item.image} style={{ height: "200px" }}/>
@@ -43,7 +42,7 @@ const Services = () => {
                 </Card>
               ))}
             </div>
-            <div className="d-flex flex-wrap justify-content-between align-items-center justify-content-sm-center align-items-sm-center">
+            <div className="services-list">
               {servicesList.slice(3).map((item, index) => (
                 <Card key={index} style={{ width: "20rem" }} className="m-2">
                   <Card.Img variant="top" src={item.image} style={{ height: "200px" }}/>

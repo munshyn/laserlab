@@ -79,7 +79,6 @@ const ServiceAppForm = ({
   useEffect(() => {
     if (appType === "Laser Rental" && !fetchEquipment) {
       getAllEquipment();
-      console.log(equipments);
       setFetchEquipment(true);
     }
     console.log(user.name);
@@ -90,7 +89,6 @@ const ServiceAppForm = ({
       const arr = user.phone_number.split(" ", 2);
       setPhoneNumber(arr[1]);
     }
-    console.log(user);
   }, [user]);
 
   const onSubmit = async (e) => {
@@ -140,8 +138,6 @@ const ServiceAppForm = ({
       
       serviceApp = generalApp;
     }
-
-    console.log(serviceApp)
 
     const data = await applyService(serviceApp);
 
@@ -250,7 +246,7 @@ const ServiceAppForm = ({
               />
             </Form.Group>
             <Row>
-              <Col sm={12} md={8}>
+              <Col xs={12} md={8}>
               <Form.Group className="mb-3" controlId="formBasicTitle">
                 <Form.Label>Type of Project</Form.Label>
                 <Form.Select
@@ -286,7 +282,7 @@ const ServiceAppForm = ({
               </Form.Group>
             </Row>
             <Row>
-              <Col md={8} sm={12}>
+              <Col xs={12} md={8}>
                 <Form.Group className="mb-3" controlId="formBasicSampleType">
                   <Form.Label>Type of Samples</Form.Label>
                   <Form.Control
@@ -313,40 +309,41 @@ const ServiceAppForm = ({
             {appType === "Laser Rental" && (
               <>
                 <Row>
-                  <Form.Group
-                    as={Col}
-                    className="mb-3"
-                    controlId="formBasicEquipment"
-                  >
-                    <Form.Label>Equipment</Form.Label>
-                    <Form.Select
-                      required
-                      value={equipmentId}
-                      onChange={(e) => {
-                        const selectedOption = equipments?.find(
-                          (item) =>
-                            item.equipmentId === parseInt(e.target.value)
-                        );
-                        setEquipmentId(selectedOption?.equipmentId);
-                        setEquipmentName(selectedOption?.name);
-                      }}
+                  <Col xs={12} md={8}>
+                    <Form.Group
+                      className="mb-3"
+                      controlId="formBasicEquipment"
                     >
-                      <option value="">Choose</option>
-                      {equipments?.map((item, index) => {
-                        if (item.hasService && item.availability) {
-                          return (
-                            <option
-                              key={item.equipmentId}
-                              value={item.equipmentId}
-                            >
-                              {item.name}
-                            </option>
+                      <Form.Label>Equipment</Form.Label>
+                      <Form.Select
+                        required
+                        value={equipmentId}
+                        onChange={(e) => {
+                          const selectedOption = equipments?.find(
+                            (item) =>
+                              item.equipmentId === parseInt(e.target.value)
                           );
-                        }
-                        return null;
-                      })}
-                    </Form.Select>
-                  </Form.Group>
+                          setEquipmentId(selectedOption?.equipmentId);
+                          setEquipmentName(selectedOption?.name);
+                        }}
+                      >
+                        <option value="">Choose</option>
+                        {equipments?.map((item, index) => {
+                          if (item.hasService && item.availability) {
+                            return (
+                              <option
+                                key={item.equipmentId}
+                                value={item.equipmentId}
+                              >
+                                {item.name}
+                              </option>
+                            );
+                          }
+                          return null;
+                        })}
+                      </Form.Select>
+                    </Form.Group>
+                  </Col>
 
                   <Form.Group
                     as={Col}

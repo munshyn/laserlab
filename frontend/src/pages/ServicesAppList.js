@@ -9,7 +9,6 @@ const ServicesAppList = ({ servicesApp, getAllServicesApp, user }) => {
 
   useEffect(() => {
     getAllServicesApp();
-    console.log(servicesApp);
   }, [getAllServicesApp]);
 
   useEffect(() => {

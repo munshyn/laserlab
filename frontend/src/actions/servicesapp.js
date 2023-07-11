@@ -73,7 +73,6 @@ export const applyService = (serviceApp) => async (dispatch) => {
 
     return "SUCCESS";
   } catch (err) {
-    console.error(err);
     return "FAILED";
   }
 };
@@ -102,8 +101,6 @@ export const getAllServicesApp = () => async (dispatch) => {
         type: GET_ALL_SERVICE,
         payload: res.data,
       });
-
-      console.log(res.data);
 
       return res.data;
     } catch (err) {

@@ -53,7 +53,7 @@ const ListingServices = ({ items, eventKey, user }) => {
   };
 
   return (
-    <>
+    <div className="table-container">
       <Table hover bordered={false} className="listing-content" >
         <thead>
           <tr style={{ textAlign: "left" }}>
@@ -94,7 +94,7 @@ const ListingServices = ({ items, eventKey, user }) => {
           </Pagination.Item>
         ))}
       </Pagination>
-    </>
+    </div>
   );
 };
 

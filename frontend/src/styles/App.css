@@ -123,6 +123,10 @@ a{
   padding: 30px;
 }
 
+.content-status-app {
+  flex-direction: row;
+}
+
 .greetings {
   width: 20vw;
   display: flex;
@@ -219,6 +223,10 @@ a{
   justify-content: flex-end;
 }
 
+.dashboard {
+  flex-direction: row;
+}
+
 .chart-box{
   width: 75%;
 }
@@ -226,6 +234,18 @@ a{
 .activities{
   width: 25%;
 }
+
+.services-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.content-status-app p {
+  font-size: 1.3em;
+}
+
 
 @media (max-height: 100vh) {
   .main-content {
@@ -252,7 +272,20 @@ a{
     margin: 0 auto auto auto;
     padding: 1rem;
   }
-  
+
+  .content-status h3 {
+    font-size: 1.2em;
+  }
+
+  .content-status-app {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .content-status-app p {
+    font-size: 1.05em;
+  }
+
   .greetings {
     width: 20vw;
     display: flex;
@@ -267,6 +300,10 @@ a{
     color: grey;
     text-shadow: 2px 2px 4px #4a4a4a;
     padding-bottom: 2vh;
+  }
+
+  .table-container {
+    overflow: auto;
   }
 
   .listing-content .listing-item td {
@@ -324,6 +361,10 @@ a{
     padding: 2rem 1rem;
   }
 
+  .dashboard {
+    flex-direction: column;
+  }
+
   .chart-box{
     width: 100%;
     height: auto;
@@ -331,6 +372,10 @@ a{
   
   .activities{
     width: 100%;
+  }
+
+  .services-list {
+    justify-content: center;
   }
 }
 

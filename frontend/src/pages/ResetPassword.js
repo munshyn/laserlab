@@ -62,7 +62,7 @@ const ResetPassword = ({ reset_password }) => {
           <p>Provide us your email to change your current password</p>
           <Form onSubmit={(e) => onSubmit(e)}>
             <div className="form-box">
-              <div style={{ width: "20vw" }}>
+              <div className="w-50">
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                   <Form.Label>Email address</Form.Label>
                   <Form.Control

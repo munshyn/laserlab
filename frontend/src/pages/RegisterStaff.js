@@ -103,36 +103,18 @@ const RegisterStaff = ({ addStaff }) => {
           {popup_box()}
           <Form onSubmit={(e) => onSubmit(e)}>
             <Row>
-              <Form.Group as={Col} className="mb-3" controlId="formBasicName">
-                <Form.Label>Staff Name</Form.Label>
-                <Form.Control
-                  required
-                  type="text"
-                  placeholder="Enter name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                />
-              </Form.Group>
-              <Form.Group
-                as={Col}
-                className="mb-3"
-                controlId="formBasicPassword"
-              >
-                <Form.Label>Password</Form.Label>
-                <Form.Control
-                  required
-                  type="password"
-                  placeholder="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  minLength={8}
-                />
-                <Form.Text className="text-muted">
-                  Password must be more than 8 letters.
-                </Form.Text>
-              </Form.Group>
-            </Row>
-            <Row>
+              <Col xs={12} sm={12} md={6}>
+                <Form.Group className="mb-3" controlId="formBasicName">
+                  <Form.Label>Staff Name</Form.Label>
+                  <Form.Control
+                    required
+                    type="text"
+                    placeholder="Enter name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                  />
+                </Form.Group>
+              </Col>
               <Form.Group as={Col} className="mb-3" controlId="formBasicEmail">
                 <Form.Label>Email address</Form.Label>
                 <Form.Control
@@ -143,6 +125,27 @@ const RegisterStaff = ({ addStaff }) => {
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </Form.Group>
+            </Row>
+            <Row>
+              <Col xs={12} sm={12} md={6}>
+                <Form.Group
+                  className="mb-3"
+                  controlId="formBasicPassword"
+                >
+                  <Form.Label>Password</Form.Label>
+                  <Form.Control
+                    required
+                    type="password"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    minLength={8}
+                  />
+                  <Form.Text className="text-muted">
+                    Password must be more than 8 letters.
+                  </Form.Text>
+                </Form.Group>
+              </Col>
               <Form.Group
                 as={Col}
                 className="mb-3"

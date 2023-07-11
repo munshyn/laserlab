@@ -21,8 +21,6 @@ const ManageServicesApp = ({
   const [analysisReport, setAnalysisReport] = useState(null);
   const [staff, setStaff] = useState({});
 
-  // const [updateSuccess, setUpdateSuccess] = useState("");
-
   const handleDownload = async (fileURL) => {
     try {
       const blobData = await getAnalysisReport(fileURL);
@@ -102,7 +100,7 @@ const ManageServicesApp = ({
         <h1>Service Application</h1>
       </div>
       <div className="content-status">
-        <div className="d-flex justify-content-between mb-3 flex-sm-column flex-md-row align-items-sm-center">
+        <div className="d-flex content-status-app justify-content-between mb-3">
           <div className="d-flex">
             <h3 className="fw-bold">Service Type</h3>
             <h3 className="text-success fw-bold fst-italic ms-3">
@@ -114,47 +112,47 @@ const ManageServicesApp = ({
             <h3>{renderBadge(isApproved, status)}</h3>
           </div>
         </div>
-        <div className="d-flex flex-sm-column flex-md-row">
-          <div className="d-flex flex-column mb-sm-4 me-md-4 w-50 w-sm-auto w-100">
+        <div className="d-flex content-status-app">
+          <div className="d-flex flex-column mb-xs-4 me-md-4 w-50 w-xs-auto w-100">
             <Card border="secondary">
               <Card.Header className="fw-bold fs-4">
                 Application Details
               </Card.Header>
               <Card.Body className="d-flex flex-column">
                 <div className="d-flex justify-content-between">
-                  <Card.Title>Title</Card.Title>
-                  <Card.Title>{serviceApp.title}</Card.Title>
+                  <Card.Text>Title</Card.Text>
+                  <Card.Text>{serviceApp.title}</Card.Text>
                 </div>
                 <hr />
                 <div className="d-flex justify-content-between">
-                  <Card.Title>Type of Project</Card.Title>
-                  <Card.Title>{serviceApp.projectType}</Card.Title>
+                  <Card.Text>Type of Project</Card.Text>
+                  <Card.Text>{serviceApp.projectType}</Card.Text>
                 </div>
                 <hr />
                 <div className="d-flex justify-content-between">
-                  <Card.Title>Type of Sample</Card.Title>
-                  <Card.Title>{serviceApp.sampleType}</Card.Title>
+                  <Card.Text>Type of Sample</Card.Text>
+                  <Card.Text>{serviceApp.sampleType}</Card.Text>
                 </div>
                 <hr />
                 <div className="d-flex justify-content-between">
-                  <Card.Title>Number of Sample</Card.Title>
-                  <Card.Title>{serviceApp.sampleNum}</Card.Title>
+                  <Card.Text>Number of Sample</Card.Text>
+                  <Card.Text>{serviceApp.sampleNum}</Card.Text>
                 </div>
                 <hr />
                 <div className="d-flex justify-content-between">
-                  <Card.Title>Date of Use</Card.Title>
-                  <Card.Title>
+                  <Card.Text>Date of Use</Card.Text>
+                  <Card.Text>
                     {new Date(serviceApp.useDate).toLocaleDateString()}
-                  </Card.Title>
+                  </Card.Text>
                 </div>
                 {serviceApp.appType === "Laser Rental" && (
                   <>
                     <hr />
                     <div className="d-flex justify-content-between">
-                      <Card.Title>Duration of Use</Card.Title>
-                      <Card.Title>
+                      <Card.Text>Duration of Use</Card.Text>
+                      <Card.Text>
                         {parseInt(serviceApp.duration?.split(" ")[0])} Days
-                      </Card.Title>
+                      </Card.Text>
                     </div>
                   </>
                 )}
@@ -162,10 +160,10 @@ const ManageServicesApp = ({
                   <>
                     <hr />
                     <div className="d-flex justify-content-between">
-                      <Card.Title>Equipment</Card.Title>
-                      <Card.Title>
+                      <Card.Text>Equipment</Card.Text>
+                      <Card.Text>
                         {serviceApp.equipmentName || "N/A"}
-                      </Card.Title>
+                      </Card.Text>
                     </div>
                   </>
                 )}
@@ -175,7 +173,7 @@ const ManageServicesApp = ({
               <Card border="secondary" className="mt-4">
                 <Card.Header className="fw-bold fs-4">Remarks</Card.Header>
                 <Card.Body className="d-flex flex-column">
-                  <Card.Title>{remarks}</Card.Title>
+                  <Card.Text>{remarks}</Card.Text>
                 </Card.Body>
               </Card>
             )}
@@ -187,15 +185,15 @@ const ManageServicesApp = ({
                 <Card.Body className="d-flex flex-column">
                   <div className="d-flex justify-content-between">
                     {analysisReport === null && (
-                      <Card.Title>No File Yet</Card.Title>
+                      <Card.Text>No File Yet</Card.Text>
                     )}
                     {analysisReport !== null && (
                       <>
-                        <Card.Title>
+                        <Card.Text>
                           {analysisReport.substring(
                             analysisReport.indexOf(".com/") + 5
                           )}
-                        </Card.Title>
+                        </Card.Text>
                         <Button
                           variant="outline-dark"
                           onClick={() => handleDownload(analysisReport)}
@@ -209,30 +207,30 @@ const ManageServicesApp = ({
               </Card>
             )}
           </div>
-          <div className="d-flex flex-column w-50 w-sm-auto w-100">
+          <div className="d-flex flex-column w-50 w-xs-auto w-100">
             <Card border="secondary">
               <Card.Header className="fw-bold fs-4">Your Details</Card.Header>
               <Card.Body className="d-flex flex-column">
                 <div className="d-flex justify-content-between">
-                  <Card.Title>Name</Card.Title>
-                  <Card.Title>{user?.name}</Card.Title>
+                  <Card.Text>Name</Card.Text>
+                  <Card.Text>{user?.name}</Card.Text>
                 </div>
                 <hr />
                 <div className="d-flex justify-content-between">
-                  <Card.Title>Phone Number</Card.Title>
-                  <Card.Title>{user?.phone_number}</Card.Title>
+                  <Card.Text>Phone Number</Card.Text>
+                  <Card.Text>{user?.phone_number}</Card.Text>
                 </div>
                 {user?.isStudent && (
                   <>
                     <hr />
                     <div className="d-flex justify-content-between">
-                      <Card.Title>Matrix Number</Card.Title>
-                      <Card.Title>{user?.matrixNum}</Card.Title>
+                      <Card.Text>Matrix Number</Card.Text>
+                      <Card.Text>{user?.matrixNum}</Card.Text>
                     </div>
                     <hr />
                     <div className="d-flex justify-content-between">
-                      <Card.Title>Name of Supervisor</Card.Title>
-                      <Card.Title>{serviceApp.svName}</Card.Title>
+                      <Card.Text>Name of Supervisor</Card.Text>
+                      <Card.Text>{serviceApp.svName}</Card.Text>
                     </div>
                   </>
                 )}
@@ -244,30 +242,30 @@ const ManageServicesApp = ({
               </Card.Header>
               <Card.Body className="d-flex flex-column">
                 <div className="d-flex justify-content-between">
-                  <Card.Title>Created on</Card.Title>
-                  <Card.Title>
+                  <Card.Text>Created on</Card.Text>
+                  <Card.Text>
                     {new Date(serviceApp.created).toLocaleDateString()}
-                  </Card.Title>
+                  </Card.Text>
                 </div>
                 <hr />
                 <div className="d-flex justify-content-between">
-                  <Card.Title>Created time</Card.Title>
-                  <Card.Title>
+                  <Card.Text>Created time</Card.Text>
+                  <Card.Text>
                     {new Date(serviceApp.created).toLocaleTimeString()}
-                  </Card.Title>
+                  </Card.Text>
                 </div>
                 {isApproved === 2 && (
                   <>
                     <hr />
                     <div className="d-flex justify-content-between">
-                      <Card.Title>Lab Staff in charged</Card.Title>
-                      <Card.Title>{staff.name}</Card.Title>
+                      <Card.Text>Lab Staff in charged</Card.Text>
+                      <Card.Text>{staff.name}</Card.Text>
                     </div>
 
                     <hr />
                     <div className="d-flex justify-content-between">
-                      <Card.Title>Charges</Card.Title>
-                      <Card.Title>RM {charges}</Card.Title>
+                      <Card.Text>Charges</Card.Text>
+                      <Card.Text>RM {charges}</Card.Text>
                     </div>
                   </>
                 )}

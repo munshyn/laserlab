@@ -1,4 +1,4 @@
-import { useLocation, Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { updateEquipment, getEquipment } from "../actions/equipment";
@@ -11,8 +11,6 @@ import Col from "react-bootstrap/esm/Col";
 const EditEquipment = ({ updateEquipment, getEquipment }) => {
   const prevLocation = useLocation();
   const equipment = prevLocation.state?.equipment;
-
-  console.log(equipment.regNum);
 
   const [regNum, setRegNum] = useState("");
   const [name, setName] = useState("");
@@ -92,15 +90,17 @@ const EditEquipment = ({ updateEquipment, getEquipment }) => {
         {popup_box()}
         <Form onSubmit={(e) => onSubmit(e)}>
           <Row>
-            <Form.Group as={Col} className="mb-3" controlId="formBasicRegNum">
-              <Form.Label>Registration Number</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter Registration Number"
-                value={regNum}
-                onChange={(e) => setRegNum(e.target.value)}
-              />
-            </Form.Group>
+            <Col xs={12} sm={12} md={6}>
+              <Form.Group className="mb-3" controlId="formBasicRegNum">
+                <Form.Label>Registration Number</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Enter Registration Number"
+                  value={regNum}
+                  onChange={(e) => setRegNum(e.target.value)}
+                />
+              </Form.Group>
+            </Col>
             <Form.Group as={Col} className="mb-3" controlId="formBasicName">
               <Form.Label>Name</Form.Label>
               <Form.Control
@@ -112,24 +112,28 @@ const EditEquipment = ({ updateEquipment, getEquipment }) => {
             </Form.Group>
           </Row>
           <Row>
-            <Form.Group as={Col} className="mb-3" controlId="formBasicLocation">
-              <Form.Label>Equipment Location</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Location"
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-              />
-            </Form.Group>
-            <Form.Group as={Col} className="mb-3" controlId="formBasicQty">
-              <Form.Label>Quantity</Form.Label>
-              <Form.Control
-                type="number"
-                placeholder="Quantity"
-                value={qty}
-                onChange={(e) => setQty(e.target.value)}
-              />
-            </Form.Group>
+            <Col xs={12} sm={12} md={4}>
+              <Form.Group className="mb-3" controlId="formBasicLocation">
+                <Form.Label>Equipment Location</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Location"
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                />
+              </Form.Group>
+            </Col>
+            <Col xs={12} sm={12} md={4}>
+              <Form.Group className="mb-3" controlId="formBasicQty">
+                <Form.Label>Quantity</Form.Label>
+                <Form.Control
+                  type="number"
+                  placeholder="Quantity"
+                  value={qty}
+                  onChange={(e) => setQty(e.target.value)}
+                />
+              </Form.Group>
+            </Col>
             <Form.Group as={Col} className="mb-3" controlId="formBasicPrice">
               <Form.Label>Equipment Price (RM)</Form.Label>
               <Form.Control
@@ -141,21 +145,23 @@ const EditEquipment = ({ updateEquipment, getEquipment }) => {
             </Form.Group>
           </Row>
           <Row>
-            <Form.Group as={Col} className="mb-3" controlId="formBasicStatus">
-              <Form.Label>Equipment Status</Form.Label>
-              <Form.Select
-                required
-                value={status}
-                onChange={(e) => setStatus(e.target.value)}
-              >
-                <option value="">Choose</option>
-                {statuses.map((status, index) => (
-                  <option key={index} value={status}>
-                    {status}
-                  </option>
-                ))}
-              </Form.Select>
-            </Form.Group>
+            <Col xs={12} sm={12} md={3}>
+              <Form.Group className="mb-3" controlId="formBasicStatus">
+                <Form.Label>Equipment Status</Form.Label>
+                <Form.Select
+                  required
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value)}
+                >
+                  <option value="">Choose</option>
+                  {statuses.map((status, index) => (
+                    <option key={index} value={status}>
+                      {status}
+                    </option>
+                  ))}
+                </Form.Select>
+              </Form.Group>
+            </Col>
             <Form.Group
               as={Col}
               className="mb-3"
@@ -198,20 +204,21 @@ const EditEquipment = ({ updateEquipment, getEquipment }) => {
                 onChange={(e) => setHasService(e.target.value === "true")}
               />
             </Form.Group>
-            <Form.Group
-              as={Col}
-              className="mb-3"
-              controlId="formBasicAvailability"
-            >
-              <Form.Label>Availability</Form.Label>
-              <Form.Select
-                value={availability.toString()}
-                onChange={(e) => setAvailability(e.target.value === "true")}
+            <Col xs={12} sm={12} md={3}>
+              <Form.Group
+                className="mb-3"
+                controlId="formBasicAvailability"
               >
-                <option value="true">Available</option>
-                <option value="false">Not available</option>
-              </Form.Select>
-            </Form.Group>
+                <Form.Label>Availability</Form.Label>
+                <Form.Select
+                  value={availability.toString()}
+                  onChange={(e) => setAvailability(e.target.value === "true")}
+                >
+                  <option value="true">Available</option>
+                  <option value="false">Not available</option>
+                </Form.Select>
+              </Form.Group>
+            </Col>
           </Row>
           <Button variant="dark" type="submit">
             Update

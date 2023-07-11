@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Pagination, Table, Dropdown, Badge } from "react-bootstrap";
+import { Table, Dropdown, Badge } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 const ListingEquipment = ({ items, onDelete }) => {

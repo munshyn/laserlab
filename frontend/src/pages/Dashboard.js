@@ -157,7 +157,7 @@ const Dashboard = ({ getAllServicesApp, getAllEquipment, isAuthenticated }) => {
         <h1>Dashboard</h1>
       </div>
       <div className="container-fluid w-75">
-        <div className="d-flex flex-sm-column flex-md-row justify-content-between">
+        <div className="d-flex dashboard justify-content-between">
           <Card border="dark" className="mb-3">
             <Card.Header>Total Equipments</Card.Header>
             <Card.Body>
@@ -188,7 +188,7 @@ const Dashboard = ({ getAllServicesApp, getAllEquipment, isAuthenticated }) => {
             </Card.Body>
           </Card>
         </div>
-        <div className="d-flex justify-content-between mt-5 flex-md-row flex-sm-column">
+        <div className="d-flex dashboard justify-content-between mt-5">
           <div className="chart-box mx-md-2 d-flex flex-column">
             <h3>Lab Service Applications for the last seven days</h3>
             <div className="w-100 h-100" ref={chartContainerRef}>
@@ -211,7 +211,7 @@ const Dashboard = ({ getAllServicesApp, getAllEquipment, isAuthenticated }) => {
               </BarChart>
             </div>
           </div>
-          <div className="activities d-flex flex-column mx-md-2 mt-sm-3 mb-5">
+          <div className="activities d-flex flex-column mt-xs-3 mx-md-2 mb-5">
             <h3>Recent Activities</h3>
             {servicesAppRecent.length > 0 &&
               servicesAppRecent.map((item, index) => {

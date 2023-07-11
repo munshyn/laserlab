@@ -182,7 +182,7 @@ const Register = ({ signup }) => {
           </p>
           <Form onSubmit={(e) => onSubmit(e)}>
             <Row>
-              <Col xs={12} md={6}>
+              <Col xs={12} sm={12} md={6}>
                 <Form.Group className="mb-3" controlId="formBasicName">
                   <Form.Label>Name</Form.Label>
                   <Form.Control
@@ -210,7 +210,7 @@ const Register = ({ signup }) => {
               </Form.Group>
             </Row>
             <Row>
-              <Col sm={12} md={6}>
+              <Col xs={12} sm={12} md={6}>
                 <Form.Group className="mb-3" controlId="formBasicPassword">
                   <Form.Label>Password</Form.Label>
                   <Form.Control
